@@ -42,7 +42,7 @@ def draw():
 def update():
     global title_frame
     title_frame = ( title_frame + 1 ) % 10
-    delay(0.001)
+    delay(0.01)
 
 
 def pause():
