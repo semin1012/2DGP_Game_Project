@@ -1,6 +1,8 @@
 from pico2d import *
 import game_framework
+import main_state
 from background import Background
+from main_state import *
 
 import game_world
 
@@ -25,9 +27,9 @@ FRAMES_PER_JUMP = 5
 FRAMES_PER_STOP = 9
 
 # Character Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SPACE_DOWN, JUMP_TIMER, DEBUG_KEY = range(7)
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SPACE, JUMP_TIMER, DEBUG_KEY = range(7)
 
-event_name = [ 'RIGHT_DOWN', 'LEFT_DOWN', 'RIGHT_UP', 'LEFT_UP', 'SPACE_DOWN', 'JUMP_TIMER', 'DEBUG_KEY']
+event_name = [ 'RIGHT_DOWN', 'LEFT_DOWN', 'RIGHT_UP', 'LEFT_UP', 'SPACE', 'JUMP_TIMER', 'DEBUG_KEY']
 # background = Background()
 
 history = []
@@ -39,12 +41,12 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_LEFT): LEFT_DOWN,
     (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
     (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
-    (SDL_KEYDOWN, SDLK_SPACE): SPACE_DOWN,
+    (SDL_KEYDOWN, SDLK_SPACE): SPACE,
 }
 
 class Character:    # 마리오
+    x, y = 400, 50
     def __init__(self):
-        self.x, self.y = 400, 50
         # self.cx, self.cy = 50, 0
         self.dir, self.cdir = 0, 0
         self.jump, self.jump_count = 0, 0
@@ -81,7 +83,11 @@ class Character:    # 마리오
 
     def draw(self):         # 보는 방향에 대해 다른 sprite 적용
         self.cur_state.draw(self)
+        draw_rectangle(*self.get_bb())
         # debug_print('Velocity :' + str(self.velocity) + ' Dir:' + str(self.dir) + ' State: ' + str(self.cur_state))
+
+    def character_jump(self):
+        print('jump')
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
@@ -91,6 +97,9 @@ class Character:    # 마리오
             else:
                 self.add_event(key_event)
 
+    def get_bb(self):
+        # fill here
+       return Character.x - 23, Character.y - 30, Character.x + 23, Character.y + 30
 
 class JumpState:
     jump_num = 0
@@ -110,7 +119,7 @@ class JumpState:
             print('ENTER JUMP')
             character.jump_timer = 400
             JumpState.jump_num += 1
-            JumpState.jump_high = 200
+            JumpState.jump_high = 75
 
     def exit(character, event):
         print('EXIT JUMP')  # 대쉬 상태 잘 나가는지 확인
@@ -121,29 +130,45 @@ class JumpState:
             character.frame = (character.frame + FRAMES_PER_JUMP * ACTION_PER_TIME * game_framework.frame_time) % 5
             character.jump_timer -= 1
 
-            character.y += JumpState.jump_high * 5 * game_framework.frame_time
+            Character.y += JumpState.jump_high * 13 * game_framework.frame_time
 
-            if Background.backgroundX <= 0 or Background.backgroundX >= 3800:
-                character.x += character.velocity * game_framework.frame_time
+            if Background.backgroundX <= 0 or Background.backgroundX >= 4000:
+                Character.x += character.velocity * game_framework.frame_time
 
-            elif character.x >= 395 and character.x <= 405:
+            elif Character.x >= 395 and Character.x <= 405:
                 Background.backgroundX += int(character.dir)
 
-            character.x = clamp(25, character.x, 800 - 25)
+            Character.x = clamp(25, Character.x, 800 - 25)
+
+            for brick in main_state.Brick1:
+                if JumpState.jump_high <= 0:
+                    if main_state.collide(main_state.mario, brick):
+                        character.jump_timer = 0
+                        Character.y = 15 + 40
+
+            for brick in main_state.Brick2:
+                if JumpState.jump_high <= 0:
+                    if main_state.collide(main_state.mario, brick):
+                        character.jump_timer = 0
+                        Character.y = 150 + 40
+                    else:
+                        pass
+
 
             if character.jump_timer == 0:
                 character.add_event(JUMP_TIMER)
                 JumpState.jump_num = 0
 
+
             JumpState.jump_high -= 1
-            character.y = clamp(25, character.y, 600 - 25)
+            Character.y = clamp(25, Character.y, 600 - 25)
 
     @staticmethod
     def draw(character):
         if character.dir == 1:
-            character.image_jump_right.clip_draw(int(character.frame) * 46, 0, 46, 60, character.x, character.y)
+            character.image_jump_right.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
         else:
-            character.image_jump_left.clip_draw(int(character.frame) * 46, 0, 46, 60, character.x, character.y)
+            character.image_jump_left.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
 
 
 class IdleState:
@@ -165,9 +190,9 @@ class IdleState:
 
     def draw(character):
         if character.dir == 1:
-            character.image_org.clip_draw(int(character.frame) * 46, 0, 46, 60, character.x, character.y)
+            character.image_org.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
         else:
-            character.image_org.clip_draw(int(character.frame) * 46, 0, 46, 60, character.x, character.y)
+            character.image_org.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
 
 
 class RunState:
@@ -187,25 +212,25 @@ class RunState:
 
     def do(character):
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
-        if character.x >= 395 and character.x <= 405:
-            Background.backgroundX += character.dir
+        if Character.x >= 395 and Character.x <= 405:
+            Background.backgroundX += int(character.dir)
 
         if Background.backgroundX <= 0 or Background.backgroundX >= 4000:
-            character.x += character.velocity * game_framework.frame_time
+            Character.x += character.velocity * game_framework.frame_time
 
-        character.x = clamp(25, character.x, 800 - 25)
+        Character.x = clamp(25, Character.x, 800 - 25)
 
     @staticmethod
     def draw(character):
         if character.dir == 1:
-            character.image_right.clip_draw(int(character.frame) * 46, 0, 46, 60, character.x, character.y)
+            character.image_right.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
         else:
-            character.image_left.clip_draw(int(character.frame) * 46, 0, 46, 60, character.x, character.y)
+            character.image_left.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
 
 
 
 next_state_table = {
-    JumpState: {RIGHT_UP: JumpState, LEFT_UP: JumpState, RIGHT_DOWN: JumpState, LEFT_DOWN: JumpState, JUMP_TIMER: RunState, SPACE_DOWN: JumpState},
-    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, JUMP_TIMER: RunState, SPACE_DOWN: JumpState},
-    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: RunState, RIGHT_DOWN: RunState, JUMP_TIMER: IdleState, SPACE_DOWN: JumpState}
+    JumpState: {RIGHT_UP: JumpState, LEFT_UP: JumpState, RIGHT_DOWN: JumpState, LEFT_DOWN: JumpState, SPACE: JumpState, JUMP_TIMER: RunState},
+    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, JUMP_TIMER: RunState, SPACE: JumpState},
+    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: RunState, RIGHT_DOWN: RunState, JUMP_TIMER: IdleState, SPACE: JumpState}
 }
