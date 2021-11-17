@@ -3,18 +3,19 @@ import game_framework
 import main_state
 from background import Background
 from main_state import *
+from fire_ball import Fire_ball
 
 import game_world
 
-PIXEL_PER_METER = (20.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 50.0   # km / hour
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 20.0   # km / hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0 )
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER )
 
 
 JUMP_PIXEL_PER_METER = 20.0 / 0.3
-JUMP_SPEED_KMPH = 50
+JUMP_SPEED_KMPH = 20
 JUMP_SPEED_MPM = JUMP_SPEED_KMPH * 1000.0 / 60.0
 JUMP_SPEED_MPS = JUMP_SPEED_MPM / 60.0
 JUMP_SPEED_PPS = JUMP_SPEED_MPS * JUMP_PIXEL_PER_METER
@@ -47,12 +48,12 @@ key_event_table = {
 
 
 # 아이템 설정 필요 object
-item1 = 0
-item2 = 0
 
 class Character:    # 마리오
     x, y = 400, 50
-    attack_cheack = 0
+    item1 = 0
+    item2 = 0
+    ball = None
     def __init__(self):
         # self.cx, self.cy = 50, 0
         self.dir, self.cdir = 0, 0
@@ -63,6 +64,13 @@ class Character:    # 마리오
         self.image_right = load_image('mario_right.png')
         self.image_jump_left = load_image('mario_jump_left.png')
         self.image_jump_right = load_image('mario_jump_right.png')
+
+        self.image_org_fire = load_image('mario_character_fire.png')
+        self.image_left_fire = load_image('mario_left_fire.png')
+        self.image_right_fire = load_image('mario_right_fire.png')
+        self.image_jump_left_fire = load_image('mario_jump_left_fire.png')
+        self.image_jump_right_fire = load_image('mario_jump_right_fire.png')
+
         self.frame = 0
         self.jump_timer = 0
 
@@ -97,8 +105,10 @@ class Character:    # 마리오
         draw_rectangle(*self.get_bb())
         # debug_print('Velocity :' + str(self.velocity) + ' Dir:' + str(self.dir) + ' State: ' + str(self.cur_state))
 
-    def attack(self):
-        print('attack')
+    def fire_ball(self):
+        print('fire_ball')
+        Character.ball = Fire_ball(Character.x, Character.y, self.dir)
+        game_world.add_object(Character.ball, 1)
         pass
 
     def handle_event(self, event):
@@ -111,13 +121,17 @@ class Character:    # 마리오
 
     def get_bb(self):
         # fill here
-       return Character.x - 23, Character.y - 30, Character.x + 23, Character.y + 30
+        if Character.item1 == 1:
+            return Character.x - 17.25, Character.y - 22.5 - 10, Character.x + 17.25, Character.y + 22.5 - 10
+
+        return Character.x - 23, Character.y - 30, Character.x + 23, Character.y + 30
 
 class JumpState:
     jump_num = 0
     jump_high = 100
     stop = 0
     jump = 0
+    jump_check = 0
 
     def enter(character, event):
         if event == RIGHT_DOWN:
@@ -131,24 +145,25 @@ class JumpState:
         character.dir = clamp(-1, character.velocity, 1)
 
         if JumpState.jump_num == 0:
-            print('ENTER JUMP')
+            # print('ENTER JUMP')
             character.jump_timer = 1000
             JumpState.jump_num += 1
             JumpState.jump_high = 75
+            JumpState.jump = 0
+            main_state.damage = 0
         JumpState.stop = 0
-        JumpState.jump = 0
-        main_state.damage = 0
 
     def exit(character, event):
         if event == SPACE and JumpState.jump == 1:
             JumpState.jump_num = 0
+            Character.y += 1
+            character.jump_timer = 1000
 
         if event == ATTACK:
-            if character.attack_cheack == 1:
-                attack()
+            if Character.item2 == 1:
+                character.fire_ball()
 
             else : pass
-            print('JumpState Attack')
             # character.fire_ball()
             pass
         pass
@@ -159,14 +174,13 @@ class JumpState:
                 character.frame = (character.frame + FRAMES_PER_JUMP * ACTION_PER_TIME * game_framework.frame_time) % 2
                 character.jump_timer -= 1
 
-                # if JumpState.jump == 0:
-                Character.y += JumpState.jump_high * 3.5 * game_framework.frame_time
+                Character.y += JumpState.jump_high * 12 * game_framework.frame_time
 
                 if Background.backgroundX <= 0 or Background.backgroundX >= 4000:
                     Character.x += character.velocity * game_framework.frame_time
 
                 elif Character.x >= 395 and Character.x <= 405:
-                    Background.backgroundX += int(character.dir) * 3
+                    Background.backgroundX += int(character.dir)
 
 
                 Character.x = clamp(25, Character.x, 800 - 25)
@@ -176,30 +190,34 @@ class JumpState:
                     main_state.damage = 0
                     JumpState.jump_num = 0
 
-
-                JumpState.jump_high -= 1
+                if Character.y > 15 + 40:
+                    JumpState.jump_high -= 1
                 Character.y = clamp(25, Character.y, 600 - 25)
 
 
     @staticmethod
     def draw(character):
         if character.dir == 1:
-            if item1 == 1:
+            if Character.item1 == 1:
                 character.image_right.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y - 10, 34.5, 45)
-            elif item2 == 1:
-                character.image_right.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y + 10, 57.5, 75)
+            elif Character.item2 == 1:
+                character.image_right_fire.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y, 46, 60)
             else:
                 character.image_right.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
             # character.image_jump_left.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
 
-        elif character.dir == 0:
-                character.image_org.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
+        elif character.dir == 0 and Character.item2 == 1:
+                character.image_org_fire.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
+
+        elif character.dir == 0 and Character.item1 == 1:
+                character.image_org.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y - 10, 34.5, 45)
+
 
         else:
-            if item1 == 1:
+            if Character.item1 == 1:
                 character.image_left.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y - 10, 34.5, 45)
-            elif item2 == 1:
-                character.image_left.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y + 10, 57.5, 75)
+            elif Character.item2 == 1:
+                character.image_left_fire.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y, 46, 60)
             else:
                 character.image_left.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
             # character.image_jump_left.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
@@ -220,26 +238,26 @@ class IdleState:
 
     def exit(character, event):
         if event == ATTACK:
-            print('IdleState Attack')
-            # character.fire_ball()
-            pass
+            if Character.item2 == 1:
+                character.fire_ball()
+            else: pass
 
     def do(character):
         character.frame = (character.frame + FRAMES_PER_STOP * ACTION_PER_TIME * game_framework.frame_time) % 9
 
     def draw(character):
         if character.dir == 1:
-            if item1 == 1:
+            if Character.item1 == 1:
                 character.image_org.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y - 10, 34.5, 45)
-            elif item2 == 1:
-                character.image_org.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y + 10, 57.5, 75)
+            elif Character.item2 == 1:
+                character.image_org_fire.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y, 46, 60)
             else:
                 character.image_org.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
         else:
-            if item1 == 1:
+            if Character.item1 == 1:
                 character.image_org.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, 'h', Character.x, Character.y - 10, 34.5, 45)
-            elif item2 == 1:
-                character.image_org.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, 'h', Character.x, Character.y + 10, 57.5, 75)
+            elif Character.item2 == 1:
+                character.image_org_fire.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, 'h', Character.x, Character.y, 46, 60)
             else:
                 character.image_org.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, 'h', Character.x, Character.y, 46, 60)
 
@@ -258,15 +276,15 @@ class RunState:
 
     def exit(character, event):
         if event == ATTACK:
-            print('RunState Attack')
-            # character.fire_ball()
-            pass
+            if Character.item2 == 1:
+                character.fire_ball()
+            else: pass
 
 
     def do(character):
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
         if Character.x >= 395 and Character.x <= 405:
-            Background.backgroundX += int(character.dir) * 3
+            Background.backgroundX += int(character.dir)
 
         if Background.backgroundX <= 0 or Background.backgroundX >= 4000:
             Character.x += character.velocity * game_framework.frame_time
@@ -278,18 +296,18 @@ class RunState:
     def draw(character):
         if character.dir == 1:
             # character.image.clip_composite_draw(character.frame * 100, 200, 100, 100, 0, '', Character.x + 25, Character.y - 25, 100, 100)
-            if item1 == 1:
+            if Character.item1 == 1:
                 character.image_right.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y - 10, 34.5, 45)
-            elif item2 == 1:
-                character.image_right.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y + 10, 57.5, 75)
+            elif Character.item2 == 1:
+                character.image_right_fire.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y, 46, 60)
             else:
                 character.image_right.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
 
         else:
-            if item1 == 1:
+            if Character.item1 == 1:
                 character.image_left.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y - 10, 34.5, 45)
-            elif item2 == 1:
-                character.image_left.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y + 10, 57.5, 75)
+            elif Character.item2 == 1:
+                character.image_left_fire.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y, 46, 60)
             else:
                 character.image_left.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
 
