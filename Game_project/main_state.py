@@ -136,7 +136,7 @@ def enter():
     game_world.add_object(green, 0)
     game_world.add_object(green2, 0)
     game_world.add_object(pupple, 0)
-    game_world.add_object(path, 0)
+    game_world.add_object(path, 2)
     # game_world.add_object(Brick1, 0)
 
 
@@ -156,6 +156,9 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
                 game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and collide_bottom(mario, path) and Character.next_state_table == 0:
+            Character.next_state_table = 1
+
         else:
             mario.handle_event(event)
 
@@ -187,17 +190,18 @@ def update():
             if pupple.y == question.y and pupple.x == question.x:
                 Pupple.move = 1
 
-        if collide_bottom(mario, questions[2]):
-            Character.jump_timer = 0
-            JumpState.jump_high = 0
-            Character.y = 300 + 45
-            JumpState.jump = 1
+        if JumpState.jump_high <= 0:
+            if collide_bottom(mario, questions[2]):
+                Character.jump_timer = 0
+                JumpState.jump_high = 0
+                Character.y = 300 + 45
+                JumpState.jump = 1
 
-        elif collide_bottom(mario, question):
-            Character.jump_timer = 0
-            JumpState.jump_high = 0
-            Character.y = 150 + 45
-            JumpState.jump = 1
+            elif collide_bottom(mario, question):
+                Character.jump_timer = 0
+                JumpState.jump_high = 0
+                Character.y = 150 + 45
+                JumpState.jump = 1
 
     for monster in monsters:
         if collide_bottom(mario, monster) and JumpState.jump_high <= 0:
@@ -257,10 +261,10 @@ def update():
         Character.item2 = 1
         game_world.remove_object(star)
 
-    if collide_bottom(mario, path):
+    if collide_bottom(mario, path) and Character.next_state_table == 0:
         JumpState.jump_high = 0
         Character.jump_timer = 0
-        Character.y = 120
+        Character.y = 115
         JumpState.jump = 1
 
 
@@ -282,7 +286,7 @@ def update():
             heart_check = 1
 
     if collide(mario, green2):
-        if heart_check == 1:
+        if heart_check == 1 or heart_check == 0:
             heart_num = len(heart_list) - 1
             game_world.remove_object(green2)
             if heart_num >=  0:

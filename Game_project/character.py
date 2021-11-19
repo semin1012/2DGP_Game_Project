@@ -53,6 +53,7 @@ class Character:    # 마리오
     x, y = 400, 50
     item1 = 0
     item2 = 0
+    next_state_table = 0
     ball = None
     def __init__(self):
         # self.cx, self.cy = 50, 0
@@ -99,6 +100,15 @@ class Character:    # 마리오
                 # 오류가 나는 상태와 이벤트 값이 무엇인지 확인하고 next_state_table에 추가하면 됨
                 exit(-1)    # 프로그램 종료
             self.cur_state.enter(self, event)
+
+        if Character.next_state_table == 1:
+            if Character.y >= 55:
+                Character.y -= RUN_SPEED_PPS * game_framework.frame_time
+
+            else:
+                Character.next_state_table = 0
+                main_state.stage = 2
+                print(main_state.stage)
 
     def draw(self):         # 보는 방향에 대해 다른 sprite 적용
         self.cur_state.draw(self)
@@ -195,6 +205,8 @@ class JumpState:
                 Character.y = clamp(25, Character.y, 600 - 25)
 
 
+
+
     @staticmethod
     def draw(character):
         if character.dir == 1:
@@ -207,10 +219,13 @@ class JumpState:
             # character.image_jump_left.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
 
         elif character.dir == 0 and Character.item2 == 1:
-                character.image_org_fire.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
+            character.image_org_fire.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
 
         elif character.dir == 0 and Character.item1 == 1:
-                character.image_org.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y - 10, 34.5, 45)
+            character.image_org.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x, Character.y - 10, 34.5, 45)
+
+        elif character.dir == 0:
+            character.image_org.clip_draw(int(character.frame) * 46, 0, 46, 60, Character.x, Character.y)
 
 
         else:
@@ -244,6 +259,7 @@ class IdleState:
 
     def do(character):
         character.frame = (character.frame + FRAMES_PER_STOP * ACTION_PER_TIME * game_framework.frame_time) % 9
+
 
     def draw(character):
         if character.dir == 1:

@@ -29,7 +29,7 @@ class Fire_ball:
 
     def draw(self):
         # self.image.draw(self.x, self.y)
-        Fire_ball.image.clip_composite_draw(int(self.frame) * 33 , 0, 33, 40, 0, '', self.x, self.y, 33, 40)
+        Fire_ball.image.clip_composite_draw(int(self.frame) * 33, 0, 33, 40, 0, '', self.x, self.y, 33, 40)
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
@@ -49,9 +49,9 @@ class Fire_ball:
                 main_state.monsters.remove(monster)
                 game_world.remove_object(monster)
 
-        if self.move <= 250:
+        if self.move <= 200:
             self.x += int(self.velocity) * RUN_SPEED_PPS * game_framework.frame_time
-            self.move += self.velocity * game_framework.frame_time
+            self.move += self.velocity * RUN_SPEED_PPS * game_framework.frame_time
             self.frame = (self.frame + FRAMES_PER_STOP * ACTION_PER_TIME * game_framework.frame_time) % 9
 
 
