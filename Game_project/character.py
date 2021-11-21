@@ -14,8 +14,8 @@ RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER )
 
 
-JUMP_PIXEL_PER_METER = 20.0 / 0.3
-JUMP_SPEED_KMPH = 20
+JUMP_PIXEL_PER_METER = 10.0 / 0.3
+JUMP_SPEED_KMPH = 1.5
 JUMP_SPEED_MPM = JUMP_SPEED_KMPH * 1000.0 / 60.0
 JUMP_SPEED_MPS = JUMP_SPEED_MPM / 60.0
 JUMP_SPEED_PPS = JUMP_SPEED_MPS * JUMP_PIXEL_PER_METER
@@ -184,14 +184,13 @@ class JumpState:
                 character.frame = (character.frame + FRAMES_PER_JUMP * ACTION_PER_TIME * game_framework.frame_time) % 2
                 character.jump_timer -= 1
 
-                Character.y += JumpState.jump_high * 12 * game_framework.frame_time
+                Character.y += JumpState.jump_high * JUMP_SPEED_PPS * game_framework.frame_time
 
                 if Background.backgroundX <= 0 or Background.backgroundX >= 4000:
                     Character.x += character.velocity * game_framework.frame_time
 
                 elif Character.x >= 395 and Character.x <= 405:
                     Background.backgroundX += int(character.dir)
-
 
                 Character.x = clamp(25, Character.x, 800 - 25)
 

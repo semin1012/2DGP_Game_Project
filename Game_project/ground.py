@@ -52,8 +52,8 @@ class Ground:
         # fill here
        return self.x - 27 - Background.backgroundX, self.y - 15, self.x + 27 - Background.backgroundX, self.y + 15
 
-    def Coin_draw1(self):
-        if stage == 1:
-            for i in range(1, len(Ground.coin2)):
-                self.image_coin.clip_draw(self.coin_frame*35, 0, 35, 35, (54 * i) * Ground.coin2[i] - Background.backgroundX, 200-Character.y)
-                self.image_coin.clip_draw(self.coin_frame*35, 0, 35, 35, (54 * i) * Ground.coin3[i] - Background.backgroundX, 350-Character.y)
+    # def Coin_draw1(self):
+    #     if stage == 1:
+    #         for i in range(1, len(Ground.coin2)):
+    #             self.image_coin.clip_draw(self.coin_frame*35, 0, 35, 35, (54 * i) * Ground.coin2[i] - Background.backgroundX, 200-Character.y)
+    #             self.image_coin.clip_draw(self.coin_frame*35, 0, 35, 35, (54 * i) * Ground.coin3[i] - Background.backgroundX, 350-Character.y)

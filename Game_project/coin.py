@@ -39,6 +39,5 @@ class Coin:
        return self.x - 15 - Background.backgroundX, self.y - 15, self.x + 15 - Background.backgroundX, self.y + 15
 
     def draw(self):
-        if main_state.stage == 1:
-            self.image_coin.clip_draw(int(self.frame) * 30, 0, 30, 30, self.x - Background.backgroundX, self.y)
+        self.image_coin.clip_draw(int(self.frame) * 30, 0, 30, 30, self.x - Background.backgroundX, self.y)
         draw_rectangle(*self.get_bb())

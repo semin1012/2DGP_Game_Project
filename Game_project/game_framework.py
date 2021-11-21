@@ -101,7 +101,7 @@ def run(start_state):
         stack[-1].update()
         stack[-1].draw()
         # fill here
-        frame_time = time.time() - current_time
+        frame_time = 0.005001
         frame_rate = 1.0 / frame_time
         current_time += frame_time
         # print("Frame Time: %f sec, Frame Rate: %f fps" %(frame_time, frame_rate))

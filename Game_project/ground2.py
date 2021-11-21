@@ -6,8 +6,16 @@ import character
 
 
 class Ground2:
+    image1 = None
+    image2 = None
+
     def __init__(self, x = 60, y = 150):
-        self.image_brick1 = load_image('mario_tile1.png')
+        if Ground2.image1 == None:
+            Ground2.image1 = load_image('mario_tile1.png')
+
+        if Ground2.image2 == None:
+            Ground2.image2 = load_image('mario_tile2.png')
+
         self.x, self.y = x, y
 
     def update(self):
@@ -15,8 +23,17 @@ class Ground2:
 
     def draw(self):
         if main_state.stage == 1:
-            self.image_brick1.draw(self.x - Background.backgroundX, self.y)
+            Ground2.image1.draw(self.x - Background.backgroundX, self.y)
+
+        elif main_state.stage == 2:
+            Ground2.image2.draw(self.x - Background.backgroundX, self.y)
+
+
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-       return self.x - 15 - Background.backgroundX, self.y - 15, self.x + 15 - Background.backgroundX, self.y + 15
+        if main_state.stage == 1:
+            return self.x - 15 - Background.backgroundX, self.y - 15, self.x + 15 - Background.backgroundX, self.y + 15
+        elif main_state.stage == 2:
+            return self.x - 29 - Background.backgroundX, self.y - 16, self.x + 29 - Background.backgroundX, self.y + 16
+
