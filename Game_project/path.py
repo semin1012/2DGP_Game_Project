@@ -9,6 +9,8 @@ class Path:
         self.up = 0
 
     def update(self):
+        if main_state.stage == 2:
+            game_world.remove_object(main_state.path)
         pass
 
 

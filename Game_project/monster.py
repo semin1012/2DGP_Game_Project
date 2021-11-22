@@ -44,6 +44,17 @@ class Monster:
             else: self.dir = 0
 
 
+        if main_state.stage == 2:
+            for monster in main_state.monsters:
+                main_state.monsters.remove(monster)
+                game_world.remove_object(monster)
+
+
+            for monster in main_state.monsters2:
+                main_state.monsters2.remove(monster)
+                game_world.remove_object(monster)
+
+
     def draw(self):
         if self.dir == 1:
             self.monster_image.clip_composite_draw(int(self.frame) * 170, 0, 170, 190, 0, '', self.x - Background.backgroundX, self.y - 10, 51, 57)

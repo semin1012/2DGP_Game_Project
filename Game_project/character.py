@@ -186,7 +186,7 @@ class JumpState:
 
                 Character.y += JumpState.jump_high * JUMP_SPEED_PPS * game_framework.frame_time
 
-                if Background.backgroundX <= 0 or Background.backgroundX >= 4000:
+                if Background.backgroundX <= 0 or Background.backgroundX >= 6700:
                     Character.x += character.velocity * game_framework.frame_time
 
                 elif Character.x >= 395 and Character.x <= 405:
@@ -301,7 +301,7 @@ class RunState:
         if Character.x >= 395 and Character.x <= 405:
             Background.backgroundX += int(character.dir)
 
-        if Background.backgroundX <= 0 or Background.backgroundX >= 4000:
+        if Background.backgroundX <= 0 or Background.backgroundX >= 6700:
             Character.x += character.velocity * game_framework.frame_time
 
         Character.x = clamp(25, Character.x, 800 - 25)

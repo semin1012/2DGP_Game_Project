@@ -19,6 +19,10 @@ class Ground2:
         self.x, self.y = x, y
 
     def update(self):
+        if main_state.stage == 2:
+            for brick in main_state.Brick2:
+                main_state.Brick2.remove(brick)
+                game_world.remove_object(brick)
         pass
 
     def draw(self):

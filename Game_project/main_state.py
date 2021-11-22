@@ -66,6 +66,14 @@ brick1_2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
             0, 0, 1, 1, 1, 1, 1, 1]
 
+
+
+brick2_2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1,
+            0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
+            1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
+            0, 0, 1, 1, 1, 1, 1, 1]
+
 def collide(a, b):
     # fill here
     left_a, bottom_a, right_a, top_a = a.get_bb()
@@ -148,6 +156,7 @@ def enter():
     game_world.add_object(green2, 0)
     game_world.add_object(pupple, 0)
     game_world.add_object(path, 2)
+
 def exit():
     game_world.clear()
 
@@ -159,7 +168,7 @@ def resume():
 
 def handle_events():
     global background, mario, Brick1, Brick2, stage, brick1_1, coins, monsters, monsters2, hearts, damage, questions, star, green
-    global pupple, green2, path
+    global pupple, green2, path, brick2_2
     global stage
     events = get_events()
     for event in events:
@@ -171,38 +180,18 @@ def handle_events():
             Background.backgroundX = 400
             stage = 2
 
-            for brick in Brick1:
-                Brick1.remove(brick)
-                game_world.remove_object(brick)
-
-            for brick in Brick2:
-                Brick2.remove(brick)
-                game_world.remove_object(brick)
-
-            for coin in coins:
-                coins.remove(coin)
-                game_world.remove_object(coin)
-
-            for monster in monsters:
-                monsters.remove(monster)
-                game_world.remove_object(monster)
+            # for brick in Brick1:
+            #     Brick1.remove(brick)
+            #     game_world.remove_object(brick)
             # monsters = None
-
-            for monster in monsters2:
-                monsters2.remove(monster)
-                game_world.remove_object(monster)
             # monsters2 = None
 
-            for question in questions:
-                questions.remove(question)
-                game_world.remove_object(question)
             # questions = None
 
             game_world.remove_object(star)
             game_world.remove_object(green)
             game_world.remove_object(green2)
             game_world.remove_object(pupple)
-            game_world.remove_object(path)
             print(stage)
             # star = Star(question_list[0], 150)
             green = Green(401, 150)
@@ -211,7 +200,7 @@ def handle_events():
             #
 
             # Brick1 = [Ground(brick1_1[i] * 54 + 54 * i, 15) for i in range(len(brick1_1))]
-            Brick2 = [Ground2(brick1_2[i] * 58 * i, 150) for i in range(len(brick1_2))]
+            # Brick2 = [Ground2(brick2_2[i] * 58 * i, 150) for i in range(len(brick2_2))]
             # coins = [Coin(coin2_2[i] * 30 * i, 185) for i in range(len(coin2_2))]
             # questions = [Question(question_list2[i], question_list_top[i]) for i in range(len(question_list))]
 

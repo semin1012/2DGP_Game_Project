@@ -9,6 +9,10 @@ class Question:
         self.x, self.y = x, y
 
     def update(self):
+        if main_state.stage == 2:
+            for question in main_state.questions:
+                main_state.questions.remove(question)
+                game_world.remove_object(question)
         pass
 
     def draw(self):
