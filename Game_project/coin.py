@@ -24,11 +24,6 @@ class Coin:
     def update(self):
         self.frame = (self.frame + FRAMES_PER_COIN * ACTION_PER_TIME * game_framework.frame_time) % 24
 
-        if main_state.stage == 2:
-            for coin in main_state.coins:
-                main_state.coins.remove(coin)
-                game_world.remove_object(coin)
-
     # def draw(self):
     #     if main_state.stage == 1:
     #         self.image_brick2.draw(self.x - Background.backgroundX, self.y)

@@ -67,12 +67,18 @@ brick1_2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 1, 1, 1, 1, 1, 1]
 
 
-
-brick2_2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1,
+brick2_2 = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1,
             0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
             1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
             0, 0, 1, 1, 1, 1, 1, 1]
+
+
+brick2_3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+            0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0,
+            0, 0, 0, 1, 1, 1, 1, 0]
 
 def collide(a, b):
     # fill here
@@ -180,43 +186,47 @@ def handle_events():
             Background.backgroundX = 400
             stage = 2
 
-            # for brick in Brick1:
-            #     Brick1.remove(brick)
-            #     game_world.remove_object(brick)
-            # monsters = None
-            # monsters2 = None
+            if stage == 2:
+                for monster in monsters:
+                    game_world.remove_object(monster)
 
-            # questions = None
+                for monster in monsters2:
+                    game_world.remove_object(monster)
+
+                for coin in coins:
+                    game_world.remove_object(coin)
+
+                for question in questions:
+                    game_world.remove_object(question)
+
+                for brick in Brick2:
+                    game_world.remove_object(brick)
+
+                monsters.clear()
+                monsters2.clear()
+                coins.clear()
+                questions.clear()
+                Brick2.clear()
+
+                Brick2 = [Ground2(brick1_2[i] * 58 * i, 150) for i in range(len(brick2_2))]
+                game_world.add_objects(Brick2, 1)
+
+                print(len(Brick2))
 
             game_world.remove_object(star)
             game_world.remove_object(green)
             game_world.remove_object(green2)
             game_world.remove_object(pupple)
             print(stage)
-            # star = Star(question_list[0], 150)
+
             green = Green(401, 150)
             green2 = Green(500, 150)
             pupple = Pupple(600, 300)
-            #
 
-            # Brick1 = [Ground(brick1_1[i] * 54 + 54 * i, 15) for i in range(len(brick1_1))]
-            # Brick2 = [Ground2(brick2_2[i] * 58 * i, 150) for i in range(len(brick2_2))]
-            # coins = [Coin(coin2_2[i] * 30 * i, 185) for i in range(len(coin2_2))]
-            # questions = [Question(question_list2[i], question_list_top[i]) for i in range(len(question_list))]
+            game_world.add_object(green, 1)
+            game_world.add_object(green2, 1)
+            game_world.add_object(pupple, 1)
 
-            # Brick1 = [Ground(brick1_1[i] * 54 + 54 * i, 15) for i in range(len(brick1_1))]
-            # coins = [Coin(coin2_2[i] * 30 * i, 185) for i in range(len(coin2_2))]
-            # game_world.add_objects(Brick1, 0)
-            # game_world.add_objects(Brick2, 0)
-            # game_world.add_objects(coins, 0)
-            # game_world.add_objects(monsters, 1)
-            # game_world.add_objects(monsters2, 1)
-            # game_world.add_objects(questions, 1)
-            # game_world.add_object(star, 0)
-            # game_world.add_object(green, 0)
-            # game_world.add_object(green2, 0)
-            # game_world.add_object(pupple, 0)
-            # game_world.add_object(path, 2)
             # pass
 
         else:

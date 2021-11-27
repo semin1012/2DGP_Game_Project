@@ -42,17 +42,22 @@ class Monster:
                 self.x -= self.velocity * game_framework.frame_time
                 self.move -= self.velocity * game_framework.frame_time
             else: self.dir = 0
+        #
+        #
+        # if main_state.stage == 2:
+        #     for monster in main_state.monsters:
+        #         main_state.monsters.remove(monster)
+        #         game_world.remove_object(monster)
+        #
+        #
+        #     for monster in main_state.monsters2:
+        #         main_state.monsters2.remove(monster)
+        #         game_world.remove_object(monster)
 
+            # main_state.monsters = Monster(500, 0)
+            # print(main_state.monsters)
+            # game_world.add_objects(main_state.monsters, 1)
 
-        if main_state.stage == 2:
-            for monster in main_state.monsters:
-                main_state.monsters.remove(monster)
-                game_world.remove_object(monster)
-
-
-            for monster in main_state.monsters2:
-                main_state.monsters2.remove(monster)
-                game_world.remove_object(monster)
 
 
     def draw(self):
