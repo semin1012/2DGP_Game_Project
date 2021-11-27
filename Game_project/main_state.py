@@ -29,6 +29,7 @@ monsters = None
 monsters2 = None
 Brick1 = None
 Brick2 = None
+Brick3 = None
 questions = None
 coins = None
 stage = 1
@@ -67,15 +68,15 @@ brick1_2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 1, 1, 1, 1, 1, 1]
 
 
-brick2_2 = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1,
-            0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0,
+brick2_2 = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
             1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
             0, 0, 1, 1, 1, 1, 1, 1]
 
 
-brick2_3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-            0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+brick2_3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0,
+            0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
             1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0,
             0, 0, 0, 1, 1, 1, 1, 0]
@@ -125,7 +126,7 @@ question_list_top = [150, 150, 300, 150]
 
 def enter():
     global background, mario, Brick1, Brick2, stage, brick1_1, coins, monsters, monsters2, hearts, damage, questions, star, green
-    global pupple, green2, path
+    global pupple, green2, path, Brick3
     damage = 0
     mario = Character()
     background = Background()
@@ -174,7 +175,7 @@ def resume():
 
 def handle_events():
     global background, mario, Brick1, Brick2, stage, brick1_1, coins, monsters, monsters2, hearts, damage, questions, star, green
-    global pupple, green2, path, brick2_2
+    global pupple, green2, path, brick2_2, Brick3
     global stage
     events = get_events()
     for event in events:
@@ -202,30 +203,25 @@ def handle_events():
                 for brick in Brick2:
                     game_world.remove_object(brick)
 
+                game_world.remove_object(star)
+                game_world.remove_object(green)
+                game_world.remove_object(green2)
+                game_world.remove_object(pupple)
+
                 monsters.clear()
                 monsters2.clear()
                 coins.clear()
                 questions.clear()
                 Brick2.clear()
 
-                Brick2 = [Ground2(brick1_2[i] * 58 * i, 150) for i in range(len(brick2_2))]
-                game_world.add_objects(Brick2, 1)
+                Brick2 = [Ground2(brick2_2[i] * 58 * i, 150) for i in range(len(brick2_2))]
+                Brick3 = [Ground2(brick2_3[i] * 58 * i, 300) for i in range(len(brick2_3))]
+                game_world.add_objects(Brick2, 0)
+                game_world.add_objects(Brick3, 0)
 
                 print(len(Brick2))
 
-            game_world.remove_object(star)
-            game_world.remove_object(green)
-            game_world.remove_object(green2)
-            game_world.remove_object(pupple)
             print(stage)
-
-            green = Green(401, 150)
-            green2 = Green(500, 150)
-            pupple = Pupple(600, 300)
-
-            game_world.add_object(green, 1)
-            game_world.add_object(green2, 1)
-            game_world.add_object(pupple, 1)
 
             # pass
 
@@ -253,12 +249,16 @@ def update():
             JumpState.jump_high = -2
             if star.y == question.y and star.x == question.x:
                 Star.move = 1
+                question.image = 1
             if green.y == question.y and green.x == question.x:
                 green.move = 1
+                question.image = 1
             if green2.y == question.y and green2.x == question.x:
                 green2.move = 1
+                question.image = 1
             if pupple.y == question.y and pupple.x == question.x:
                 Pupple.move = 1
+                question.image = 1
 
         if JumpState.jump_high <= 0:
             if stage == 1:
@@ -268,7 +268,7 @@ def update():
                     Character.y = 300 + 45
                     JumpState.jump = 1
 
-            elif collide_bottom(mario, question):
+            if collide_bottom(mario, question):
                 Character.jump_timer = 0
                 JumpState.jump_high = 0
                 Character.y = 150 + 45
@@ -327,10 +327,20 @@ def update():
                 Character.y = 150 + 40
                 JumpState.jump = 1
 
+    if stage >= 2:
+        for brick in Brick3:
+            if JumpState.jump_high <= 0:
+                if collide_bottom(mario, brick):
+                    JumpState.jump_high = 0
+                    Character.jump_timer = 0
+                    Character.y = 300 + 40
+                    JumpState.jump = 1
+
     if collide(mario, star):
         Character.item1 = 0
         Character.item2 = 1
         game_world.remove_object(star)
+
 
     if collide_bottom(mario, path) and Character.next_state_table == 0:
         JumpState.jump_high = 0
