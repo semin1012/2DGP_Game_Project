@@ -29,7 +29,7 @@ class Ground2:
             Ground2.image2.draw(self.x - Background.backgroundX, self.y)
 
 
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         if main_state.stage == 1:

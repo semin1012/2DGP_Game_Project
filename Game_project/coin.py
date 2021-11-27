@@ -24,16 +24,6 @@ class Coin:
     def update(self):
         self.frame = (self.frame + FRAMES_PER_COIN * ACTION_PER_TIME * game_framework.frame_time) % 24
 
-    # def draw(self):
-    #     if main_state.stage == 1:
-    #         self.image_brick2.draw(self.x - Background.backgroundX, self.y)
-    #         # self.image_brick2.clip_draw(self.x, self.y, self.x + 54, self.y + 30, 54 - Background.backgroundX, self.y)
-
-            # for i in range(0, len(Object.brick1_1)):
-                # self.image_brick1.clip_draw(0, 0, 30, 30, (30 * i) * Object.brick1_2[i] - Background.backgroundX, self.y2)
-                # self.image_brick1.clip_draw(0, 0, 30, 30, (30 * i) * Object.brick1_3[i] - Background.backgroundX, self.y3)
-
-
     def get_bb(self):
         # fill here
        return self.x - 15 - Background.backgroundX, self.y - 15, self.x + 15 - Background.backgroundX, self.y + 15

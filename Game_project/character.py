@@ -112,11 +112,11 @@ class Character:    # 마리오
 
     def draw(self):         # 보는 방향에 대해 다른 sprite 적용
         self.cur_state.draw(self)
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         # debug_print('Velocity :' + str(self.velocity) + ' Dir:' + str(self.dir) + ' State: ' + str(self.cur_state))
 
     def fire_ball(self):
-        print('fire_ball')
+        # print('fire_ball')
         Character.ball = Fire_ball(Character.x, Character.y, self.dir)
         game_world.add_object(Character.ball, 1)
         pass

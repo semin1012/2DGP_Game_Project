@@ -30,7 +30,7 @@ class Fire_ball:
     def draw(self):
         # self.image.draw(self.x, self.y)
         Fire_ball.image.clip_composite_draw(int(self.frame) * 33, 0, 33, 40, 0, '', self.x, self.y, 33, 40)
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
 
     def get_bb(self):
        return self.x - 16.5, self.y - 20, self.x + 16.5, self.y + 20

@@ -42,22 +42,6 @@ class Monster:
                 self.x -= self.velocity * game_framework.frame_time
                 self.move -= self.velocity * game_framework.frame_time
             else: self.dir = 0
-        #
-        #
-        # if main_state.stage == 2:
-        #     for monster in main_state.monsters:
-        #         main_state.monsters.remove(monster)
-        #         game_world.remove_object(monster)
-        #
-        #
-        #     for monster in main_state.monsters2:
-        #         main_state.monsters2.remove(monster)
-        #         game_world.remove_object(monster)
-
-            # main_state.monsters = Monster(500, 0)
-            # print(main_state.monsters)
-            # game_world.add_objects(main_state.monsters, 1)
-
 
 
     def draw(self):
@@ -67,12 +51,7 @@ class Monster:
         elif self.dir == 0:
             self.monster_image.clip_composite_draw(int(self.frame) * 170, 0, 170, 190, 0, 'h', self.x - Background.backgroundX, self.y - 10, 51, 57)
 
-        # self.image_brick1.draw(self.x - Background.backgroundX, self.y)
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
 
     def get_bb(self):
        return self.x - 25.5 - Background.backgroundX, self.y - 28.5 - 10, self.x + 25.5 - Background.backgroundX, self.y + 28.5 - 10
-
-
-# character.image_jump_left.clip_composite_draw(int(character.frame) * 46, 0, 46, 60, 0, '', Character.x,
-#                                               Character.y - 10, 34.5, 45)

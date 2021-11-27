@@ -121,8 +121,9 @@ monster_list = [1100, 1200, 1150, 1050, 2000, 2050, 2100]
 monster_list_right = [2000, 2050, 2100, 3500, 3550]
 heart_list = [50, 100, 150]
 question_list = [900, 1050, 1100, 3500]
-question_list2 = [400, 500, 600, 3500]
+question_list2 = [800, 1550, 2000, 3500]
 question_list_top = [150, 150, 300, 150]
+question_list_top2 = [300, 450, 300, 150]
 
 def enter():
     global background, mario, Brick1, Brick2, stage, brick1_1, coins, monsters, monsters2, hearts, damage, questions, star, green
@@ -216,8 +217,13 @@ def handle_events():
 
                 Brick2 = [Ground2(brick2_2[i] * 58 * i, 150) for i in range(len(brick2_2))]
                 Brick3 = [Ground2(brick2_3[i] * 58 * i, 300) for i in range(len(brick2_3))]
+                questions = [Question(question_list2[i], question_list_top2[i]) for i in range(len(question_list2))]
+                star = Star(question_list2[0], 300)
+
                 game_world.add_objects(Brick2, 0)
                 game_world.add_objects(Brick3, 0)
+                game_world.add_objects(questions, 1)
+                game_world.add_object(star, 0)
 
                 print(len(Brick2))
 
@@ -247,18 +253,15 @@ def update():
     for question in questions:
         if collide_top(mario, question):
             JumpState.jump_high = -2
+            question.image = 1
             if star.y == question.y and star.x == question.x:
                 Star.move = 1
-                question.image = 1
             if green.y == question.y and green.x == question.x:
                 green.move = 1
-                question.image = 1
             if green2.y == question.y and green2.x == question.x:
                 green2.move = 1
-                question.image = 1
             if pupple.y == question.y and pupple.x == question.x:
                 Pupple.move = 1
-                question.image = 1
 
         if JumpState.jump_high <= 0:
             if stage == 1:
@@ -268,7 +271,21 @@ def update():
                     Character.y = 300 + 45
                     JumpState.jump = 1
 
-            if collide_bottom(mario, question):
+            elif stage == 2:
+                if collide_bottom(mario, questions[0]) or collide_bottom(mario, questions[2]):
+                    Character.jump_timer = 0
+                    JumpState.jump_high = 0
+                    Character.y = 300 + 45
+                    JumpState.jump = 1
+
+                if collide_bottom(mario, questions[1]):
+                    Character.jump_timer = 0
+                    JumpState.jump_high = 0
+                    Character.y = 450 + 45
+                    JumpState.jump = 1
+
+
+            elif collide_bottom(mario, question):
                 Character.jump_timer = 0
                 JumpState.jump_high = 0
                 Character.y = 150 + 45

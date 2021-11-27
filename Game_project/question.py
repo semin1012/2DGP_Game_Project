@@ -19,7 +19,7 @@ class Question:
 
         elif self.image == 1:
             self.image_ground.draw(self.x - Background.backgroundX, self.y)
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
 
     def get_bb(self):
        return self.x - 15 - Background.backgroundX, self.y - 15, self.x + 15 - Background.backgroundX, self.y + 15
