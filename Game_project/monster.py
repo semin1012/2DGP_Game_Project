@@ -17,14 +17,14 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER )
 
 
 class Monster:
-    def __init__(self, x = 300, dir = 0):
+    def __init__(self, x = 300, y = 60, dir = 0):
         self.monster_image = load_image('monster.png')
         self.frame = 0
         self.dir = dir
         if self.dir == 0:
             self.move = 0
         else: self.move = 400
-        self.x, self.y = x, 60
+        self.x, self.y = x, y
         self.velocity = RUN_SPEED_PPS
 
     def update(self):

@@ -68,8 +68,8 @@ brick1_2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 1, 1, 1, 1, 1, 1]
 
 
-brick2_2 = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+brick2_2 = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
             1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
             0, 0, 1, 1, 1, 1, 1, 1]
@@ -118,6 +118,8 @@ def collide_bottom(a, b):
     return True
 
 monster_list = [1100, 1200, 1150, 1050, 2000, 2050, 2100]
+monster_list2 = [1100, 1200, 1150, 1300, 1450, 2500, 2800]
+monster_list_top = [60, 60, 60, 190, 190, 60, 190]
 monster_list_right = [2000, 2050, 2100, 3500, 3550]
 heart_list = [50, 100, 150]
 question_list = [900, 1050, 1100, 3500]
@@ -148,8 +150,8 @@ def enter():
         path = Path()
 
         coins = [Coin(coin2[i] * 30 * i, 185) for i in range(len(coin2))]
-        monsters = [Monster(monster_list[i]) for i in range(len(monster_list))]
-        monsters2 = [Monster(monster_list_right[i], 1) for i in range(len(monster_list_right))]
+        monsters = [Monster(monster_list[i], 60) for i in range(len(monster_list))]
+        monsters2 = [Monster(monster_list_right[i], 60, 1) for i in range(len(monster_list_right))]
         # game_world.add_object(Brick1, 0)
 
 
@@ -218,12 +220,14 @@ def handle_events():
                 Brick2 = [Ground2(brick2_2[i] * 58 * i, 150) for i in range(len(brick2_2))]
                 Brick3 = [Ground2(brick2_3[i] * 58 * i, 300) for i in range(len(brick2_3))]
                 questions = [Question(question_list2[i], question_list_top2[i]) for i in range(len(question_list2))]
+                monsters = [Monster(monster_list2[i], monster_list_top[i]) for i in range(len(monster_list2))]
                 star = Star(question_list2[0], 300)
 
                 game_world.add_objects(Brick2, 0)
                 game_world.add_objects(Brick3, 0)
                 game_world.add_objects(questions, 1)
                 game_world.add_object(star, 0)
+                game_world.add_objects(monsters, 1)
 
                 print(len(Brick2))
 
