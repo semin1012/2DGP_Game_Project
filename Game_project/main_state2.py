@@ -39,33 +39,6 @@ def enter():
     game_world.add_objects(main_state.hearts, 1)
 
     if main_state.stage == 2:
-        # for monster in main_state.monsters:
-        #     game_world.remove_object(monster)
-        #
-        # for monster in main_state.monsters2:
-        #     game_world.remove_object(monster)
-        #
-        # for coin in main_state.coins:
-        #     game_world.remove_object(coin)
-        #
-        # for question in main_state.questions:
-        #     game_world.remove_object(question)
-        #
-        # for brick in main_state.Brick2:
-        #     game_world.remove_object(brick)
-        #
-        # game_world.remove_object(main_state.star)
-        # game_world.remove_object(main_state.green)
-        # game_world.remove_object(main_state.green2)
-        # game_world.remove_object(main_state.pupple)
-        # game_world.remove_object(main_state.path)
-        #
-        # main_state.monsters.clear()
-        # main_state.monsters2.clear()
-        # main_state.coins.clear()
-        # main_state.questions.clear()
-        # main_state.Brick2.clear()
-
         main_state.Brick2 = [Ground2(main_state.brick2_2[i] * 58 * i, 150) for i in range(len(main_state.brick2_2))]
         main_state.Brick3 = [Ground2(main_state.brick2_3[i] * 58 * i, 300) for i in range(len(main_state.brick2_3))]
         main_state.coins = [Coin(main_state.coin2_2[i] * 58 * i, 185) for i in range(len(main_state.coin2))]

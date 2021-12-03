@@ -24,11 +24,12 @@ from background import Background
 from path import Path
 
 import title_state
+
 name = "MainState3"
+
 
 def enter():
     if main_state.stage == 3:
-
         Background.backgroundX = 800
         main_state.heart_check = 0
         main_state.damage = 0
@@ -37,15 +38,16 @@ def enter():
         game_world.add_object(main_state.background, 0)
         game_world.add_objects(main_state.hearts, 1)
 
-
-
         main_state.Brick2 = [Ground2(main_state.brick3_2[i] * 58 * i, 150) for i in range(len(main_state.brick3_2))]
         main_state.Brick3 = [Ground2(main_state.brick3_3[i] * 58 * i, 300) for i in range(len(main_state.brick3_3))]
         main_state.coins = [Coin(main_state.coin2_3[i] * 58 * i, 185) for i in range(len(main_state.coin2_3))]
         main_state.coins3 = [Coin(main_state.coin3_3[i] * 58 * i, 335) for i in range(len(main_state.coin3_3))]
-        main_state.questions = [Question(main_state.question_list3[i], main_state.question_list_top3[i]) for i in range(len(main_state.question_list3))]
-        main_state.monsters = [Monster(main_state.monster_list3[i], main_state.monster_list_top3[i]) for i in range(len(main_state.monster_list3))]
-        main_state.monsters2 = [Monster(main_state.monster_list_right3[i], 60, 1) for i in range(len(main_state.monster_list_right3))]
+        main_state.questions = [Question(main_state.question_list3[i], main_state.question_list_top3[i]) for i in
+                                range(len(main_state.question_list3))]
+        main_state.monsters = [Monster(main_state.monster_list3[i], main_state.monster_list_top3[i]) for i in
+                               range(len(main_state.monster_list3))]
+        main_state.monsters2 = [Monster(main_state.monster_list_right3[i], 60, 1) for i in
+                                range(len(main_state.monster_list_right3))]
         main_state.star = Star(main_state.question_list3[0], 300)
         main_state.path = Path(6800, 55)
         main_state.path2 = Path(300, 55)
@@ -53,7 +55,6 @@ def enter():
         main_state.pupple2 = Pupple(9000, 300)
         main_state.green = Green(4000, 300)
         main_state.green2 = Green(9000, 150)
-
 
         game_world.add_objects(main_state.Brick2, 0)
         game_world.add_objects(main_state.Brick3, 0)
@@ -75,11 +76,14 @@ def exit():
     # game_world.clear()
     pass
 
+
 def pause():
     pass
 
+
 def resume():
     pass
+
 
 def handle_events():
     events = get_events()
@@ -87,9 +91,10 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-                game_framework.quit()
+            game_framework.quit()
 
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and main_state.collide_bottom(main_state.mario, main_state.path2) and main_state.stage == 3:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and main_state.collide_bottom(main_state.mario,
+                                                                                              main_state.path2) and main_state.stage == 3:
             Background.backgroundX = 100
             main_state.stage = 4
             game_framework.change_state(main_state_sc)
@@ -97,8 +102,6 @@ def handle_events():
 
         else:
             main_state.mario.handle_event(event)
-
-
 
 
 def update():
@@ -145,13 +148,11 @@ def update():
                     Character.y = 450 + 45
                     JumpState.jump = 1
 
-
-
     for monster in main_state.monsters:
         if main_state.collide_bottom(main_state.mario, monster) and JumpState.jump_high <= 0:
             main_state.monsters.remove(monster)
             game_world.remove_object(monster)
-        elif main_state.collide(main_state.mario, monster) :
+        elif main_state.collide(main_state.mario, monster):
             if Character.item2 == 1:
                 main_state.damage = 1
                 Character.item2 = 0
@@ -169,9 +170,8 @@ def update():
                     game_world.add_objects(main_state.hearts, 1)
 
                     main_state.damage = 1
-                else:      # heart_num == 0일 때 처리 필요
+                else:  # heart_num == 0일 때 처리 필요
                     game_framework.change_state(gameover_state)
-
 
     for monster in main_state.monsters2:
         if main_state.collide_bottom(main_state.mario, monster) and JumpState.jump_high <= 0:
@@ -197,9 +197,8 @@ def update():
 
                     main_state.damage = 1
 
-                else:         # heart_num == 0일 때 처리 필요
+                else:  # heart_num == 0일 때 처리 필요
                     game_framework.change_state(gameover_state)
-
 
     for brick in main_state.Brick1:
         if JumpState.jump_high <= 0:
@@ -231,13 +230,11 @@ def update():
         Character.item2 = 1
         game_world.remove_object(main_state.star)
 
-
     if main_state.collide_bottom(main_state.mario, main_state.path) and Character.next_state_table == 0:
         JumpState.jump_high = 0
         Character.jump_timer = 0
         Character.y = 115
         JumpState.jump = 1
-
 
     if main_state.collide(main_state.mario, main_state.green):
 
@@ -264,10 +261,10 @@ def update():
 
         main_state.hearts.clear()
 
-        if main_state.heart_num >  0:
+        if main_state.heart_num > 0:
             main_state.heart_list.append(heart_list[main_state.heart_num - 1] + 50)
         # else:
-            # heart_list.insert(heart_num + 1, 50)
+        # heart_list.insert(heart_num + 1, 50)
 
         main_state.hearts = [Heart(main_state.heart_list[i]) for i in range(len(main_state.heart_list))]
         game_world.add_objects(main_state.hearts, 1)
@@ -281,8 +278,7 @@ def update():
             Character.item2 = 0
             Character.item1 = 1
         elif Character.item1 == 1:
-            pass    # 게임 오버 되어야 함
-
+            pass  # 게임 오버 되어야 함
 
 
 def draw():
