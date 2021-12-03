@@ -5,8 +5,8 @@ import os
 import gameover_state
 import game_framework
 import game_world
-import main_state
 import main_state3
+import main_state
 from pico2d import *
 
 from character import Character

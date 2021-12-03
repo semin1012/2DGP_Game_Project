@@ -5,6 +5,7 @@ from background import Background
 from main_state import *
 from main_state2 import *
 from main_state3 import *
+from main_state_sc import *
 from fire_ball import Fire_ball
 
 import game_world

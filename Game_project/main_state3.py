@@ -47,8 +47,8 @@ def enter():
         main_state.monsters = [Monster(main_state.monster_list3[i], main_state.monster_list_top3[i]) for i in range(len(main_state.monster_list3))]
         main_state.monsters2 = [Monster(main_state.monster_list_right3[i], 60, 1) for i in range(len(main_state.monster_list_right3))]
         main_state.star = Star(main_state.question_list3[0], 300)
-        main_state.path = Path(6800, 55)
-        main_state.path2 = Path(300, 55)
+        main_state.path = Path(600, 55)
+        main_state.path2 = Path(6800, 55)
         main_state.pupple = Pupple(6000, 450)
         main_state.pupple2 = Pupple(9000, 300)
         main_state.green = Green(4000, 300)
@@ -89,7 +89,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
                 game_framework.quit()
 
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and main_state.collide_bottom(main_state.mario, main_state.path2) and main_state.stage == 3:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and main_state.collide_bottom(main_state.mario, main_state.path) and main_state.stage == 3:
             Background.backgroundX = 100
             main_state.stage = 4
             game_framework.change_state(main_state_sc)
@@ -97,8 +97,6 @@ def handle_events():
 
         else:
             main_state.mario.handle_event(event)
-
-
 
 
 def update():
