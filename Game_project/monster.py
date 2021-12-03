@@ -1,6 +1,8 @@
 from pico2d import *
 import main_state
 from main_state import *
+from main_state2 import *
+from main_state3 import *
 from background import Background
 import character
 
@@ -23,14 +25,14 @@ class Monster:
         self.dir = dir
         if self.dir == 0:
             self.move = 0
-        else: self.move = 400
+        else: self.move = 350
         self.x, self.y = x, y
         self.velocity = RUN_SPEED_PPS
 
     def update(self):
         # print(self.velocity *game_framework.frame_time )
         if self.dir == 0:
-            if self.move <= 400:
+            if self.move <= 350:
                 self.frame = (self.frame + FRAMES_PER_STOP * ACTION_PER_TIME * game_framework.frame_time) % 7
                 self.x += self.velocity * game_framework.frame_time
                 self.move += self.velocity * game_framework.frame_time

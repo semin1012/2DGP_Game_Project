@@ -1,5 +1,7 @@
 import main_state
 from main_state import *
+from main_state2 import *
+from main_state3 import *
 from background import Background
 
 class Path:
@@ -9,8 +11,6 @@ class Path:
         self.up = 0
 
     def update(self):
-        if main_state.stage == 2:
-            game_world.remove_object(main_state.path)
         pass
 
 

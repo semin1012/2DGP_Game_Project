@@ -2,8 +2,10 @@ import random
 import json
 import os
 
+import gameover_state
 import game_framework
 import game_world
+import main_state2
 from pico2d import *
 
 from character import Character
@@ -32,15 +34,20 @@ Brick2 = None
 Brick3 = None
 questions = None
 coins = None
+coins3 = None
 stage = 1
 hearts = None
 star = None
-green = None
 path = None
+green = None
 green2 = None
 pupple = None
+pupple2 = None
 damage = None
 attack = None
+
+heart_num = None
+heart_check = None
 
 
 brick1_1 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -49,24 +56,17 @@ brick1_1 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
-coin2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
-        0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
-        1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
-        0, 0, 1, 1, 1, 1, 1, 1]
-
-coin2_2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
-        1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
-        0, 0, 1, 1, 1, 1, 1, 1]
-
 brick1_2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
             0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
             1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
             0, 0, 1, 1, 1, 1, 1, 1]
 
+coin2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
+        0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
+        1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
+        0, 0, 1, 1, 1, 1, 1, 1]
 
 brick2_2 = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
@@ -80,6 +80,19 @@ brick2_3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
             1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0,
             0, 0, 0, 1, 1, 1, 1, 0]
+
+coin2_2 = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
+            1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
+            0, 0, 1, 1, 1, 1, 1, 1]
+
+coin3_2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0,
+            0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0,
+            0, 0, 0, 1, 1, 1, 1, 0]
+
 
 def collide(a, b):
     # fill here
@@ -118,18 +131,22 @@ def collide_bottom(a, b):
     return True
 
 monster_list = [1100, 1200, 1150, 1050, 2000, 2050, 2100]
-monster_list2 = [1100, 1200, 1150, 1300, 1450, 2500, 2800]
+monster_list2 = [1100, 1200, 1150, 1400, 1450, 2500, 2950]
 monster_list_top = [60, 60, 60, 190, 190, 60, 190]
 monster_list_right = [2000, 2050, 2100, 3500, 3550]
+monster_list_right2 = [2000, 2050, 2100, 3500, 3550, 5000, 5050, 5100, 5150, 6300, 6350]
 heart_list = [50, 100, 150]
 question_list = [900, 1050, 1100, 3500]
-question_list2 = [800, 1550, 2000, 3500]
+question_list2 = [800, 1550, 2000, 3500, 5000]
 question_list_top = [150, 150, 300, 150]
-question_list_top2 = [300, 450, 300, 150]
+question_list_top2 = [300, 450, 300, 150, 150]
 
 def enter():
     global background, mario, Brick1, Brick2, stage, brick1_1, coins, monsters, monsters2, hearts, damage, questions, star, green
     global pupple, green2, path, Brick3
+
+    Background.backgroundX = 4000
+    heart_check = 0
     damage = 0
     mario = Character()
     background = Background()
@@ -169,6 +186,7 @@ def enter():
 
 def exit():
     game_world.clear()
+    pass
 
 def pause():
     pass
@@ -178,7 +196,7 @@ def resume():
 
 def handle_events():
     global background, mario, Brick1, Brick2, stage, brick1_1, coins, monsters, monsters2, hearts, damage, questions, star, green
-    global pupple, green2, path, brick2_2, Brick3
+    global pupple, green2, path, brick2_2, Brick3, coins3
     global stage
     events = get_events()
     for event in events:
@@ -187,64 +205,130 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
                 game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and collide_bottom(mario, path) and stage == 1:
-            Background.backgroundX = 400
+            Background.backgroundX = 5500
             stage = 2
+            game_framework.change_state(main_state2)
+            #
+            # for monster in monsters:
+            #     game_world.remove_object(monster)
+            #
+            # for monster in monsters2:
+            #     game_world.remove_object(monster)
+            #
+            # for coin in coins:
+            #     game_world.remove_object(coin)
+            #
+            # for question in questions:
+            #     game_world.remove_object(question)
+            #
+            # for brick in Brick2:
+            #     game_world.remove_object(brick)
+            #
+            # game_world.remove_object(star)
+            # game_world.remove_object(green)
+            # game_world.remove_object(green2)
+            # game_world.remove_object(pupple)
+            # game_world.remove_object(path)
+            #
+            # monsters.clear()
+            # monsters2.clear()
+            # coins.clear()
+            # questions.clear()
+            # Brick2.clear()
+            #
+            # Brick2 = [Ground2(brick2_2[i] * 58 * i, 150) for i in range(len(brick2_2))]
+            # Brick3 = [Ground2(brick2_3[i] * 58 * i, 300) for i in range(len(brick2_3))]
+            # coins = [Coin(coin2_2[i] * 58 * i, 185) for i in range(len(coin2))]
+            # coins3 = [Coin(coin3_2[i] * 58 * i, 335) for i in range(len(coin3_2))]
+            # questions = [Question(question_list2[i], question_list_top2[i]) for i in range(len(question_list2))]
+            # monsters = [Monster(monster_list2[i], monster_list_top[i]) for i in range(len(monster_list2))]
+            # star = Star(question_list2[0], 300)
+            # path = Path(6800, 55)
+            # pupple = Pupple(1550, 450)
+            # pupple2 = Pupple(2000, 300)
+            # green = Green(3500, 150)
+            # green2 = Green(5000, 150)
+            #
+            # game_world.add_objects(Brick2, 0)
+            # game_world.add_objects(Brick3, 0)
+            # game_world.add_objects(coins, 0)
+            # game_world.add_objects(coins3, 0)
+            # game_world.add_objects(questions, 1)
+            # game_world.add_object(star, 0)
+            # game_world.add_object(green, 0)
+            # game_world.add_object(green2, 0)
+            # game_world.add_object(pupple, 0)
+            # game_world.add_object(pupple2, 0)
+            # game_world.add_objects(monsters, 1)
+            # game_world.add_object(path, 2)
 
-            if stage == 2:
-                for monster in monsters:
-                    game_world.remove_object(monster)
-
-                for monster in monsters2:
-                    game_world.remove_object(monster)
-
-                for coin in coins:
-                    game_world.remove_object(coin)
-
-                for question in questions:
-                    game_world.remove_object(question)
-
-                for brick in Brick2:
-                    game_world.remove_object(brick)
-
-                game_world.remove_object(star)
-                game_world.remove_object(green)
-                game_world.remove_object(green2)
-                game_world.remove_object(pupple)
-
-                monsters.clear()
-                monsters2.clear()
-                coins.clear()
-                questions.clear()
-                Brick2.clear()
-
-                Brick2 = [Ground2(brick2_2[i] * 58 * i, 150) for i in range(len(brick2_2))]
-                Brick3 = [Ground2(brick2_3[i] * 58 * i, 300) for i in range(len(brick2_3))]
-                questions = [Question(question_list2[i], question_list_top2[i]) for i in range(len(question_list2))]
-                monsters = [Monster(monster_list2[i], monster_list_top[i]) for i in range(len(monster_list2))]
-                star = Star(question_list2[0], 300)
-
-                game_world.add_objects(Brick2, 0)
-                game_world.add_objects(Brick3, 0)
-                game_world.add_objects(questions, 1)
-                game_world.add_object(star, 0)
-                game_world.add_objects(monsters, 1)
-
-                print(len(Brick2))
-
-            print(stage)
+        # elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and collide_bottom(mario, path) and stage == 2:
+        #     Background.backgroundX = 600
+        #     stage = 3
+        #
+        #     for monster in monsters:
+        #         game_world.remove_object(monster)
+        #
+        #     for monster in monsters2:
+        #         game_world.remove_object(monster)
+        #
+        #     for coin in coins:
+        #         game_world.remove_object(coin)
+        #
+        #     for question in questions:
+        #         game_world.remove_object(question)
+        #
+        #     for brick in Brick2:
+        #         game_world.remove_object(brick)
+        #
+        #     game_world.remove_object(star)
+        #     game_world.remove_object(green)
+        #     game_world.remove_object(green2)
+        #     game_world.remove_object(pupple)
+        #     game_world.remove_object(path)
+        #
+        #     monsters.clear()
+        #     monsters2.clear()
+        #     coins.clear()
+        #     questions.clear()
+        #     Brick2.clear()
+        #
+        #     Brick2 = [Ground2(brick2_2[i] * 58 * i, 150) for i in range(len(brick2_2))]
+        #     Brick3 = [Ground2(brick2_3[i] * 58 * i, 300) for i in range(len(brick2_3))]
+        #     coins = [Coin(coin2_2[i] * 58 * i, 185) for i in range(len(coin2))]
+        #     coins3 = [Coin(coin3_2[i] * 58 * i, 335) for i in range(len(coin3_2))]
+        #     questions = [Question(question_list2[i], question_list_top2[i]) for i in range(len(question_list2))]
+        #     monsters = [Monster(monster_list2[i], monster_list_top[i]) for i in range(len(monster_list2))]
+        #     star = Star(question_list2[0], 300)
+        #     path = Path(6800, 55)
+        #     pupple = Pupple(1550, 450)
+        #     pupple2 = Pupple(2000, 300)
+        #     green = Green(3500, 150)
+        #     green2 = Green(5000, 150)
+        #
+        #     game_world.add_objects(Brick2, 0)
+        #     game_world.add_objects(Brick3, 0)
+        #     game_world.add_objects(coins, 0)
+        #     game_world.add_objects(coins3, 0)
+        #     game_world.add_objects(questions, 1)
+        #     game_world.add_object(star, 0)
+        #     game_world.add_object(green, 0)
+        #     game_world.add_object(green2, 0)
+        #     game_world.add_object(pupple, 0)
+        #     game_world.add_object(pupple2, 0)
+        #     game_world.add_objects(monsters, 1)
+        #     game_world.add_object(path, 2)
 
             # pass
 
         else:
             mario.handle_event(event)
 
-
-heart_num = len(heart_list) - 1
-heart_check = 0
-
 def update():
     global coin_check, monster_check, damage, hearts, heart_list, question_list, questions, star, attack, green, heart_num, stage
-    global heart_check
+    global heart_check, coins3, green2
+
+    heart_num = len(heart_list)
 
     for game_object in game_world.all_objects():
         game_object.update()
@@ -253,6 +337,12 @@ def update():
         if collide(mario, coin):
             coins.remove(coin)
             game_world.remove_object(coin)
+
+    if stage != 1:
+        for coin in coins3:
+            if collide(mario, coin):
+                coins3.remove(coin)
+                game_world.remove_object(coin)
 
     for question in questions:
         if collide_top(mario, question):
@@ -274,6 +364,11 @@ def update():
                     JumpState.jump_high = 0
                     Character.y = 300 + 45
                     JumpState.jump = 1
+                if collide_bottom(mario, question):
+                    Character.jump_timer = 0
+                    JumpState.jump_high = 0
+                    Character.y = 150 + 45
+                    JumpState.jump = 1
 
             elif stage == 2:
                 if collide_bottom(mario, questions[0]) or collide_bottom(mario, questions[2]):
@@ -289,11 +384,6 @@ def update():
                     JumpState.jump = 1
 
 
-            elif collide_bottom(mario, question):
-                Character.jump_timer = 0
-                JumpState.jump_high = 0
-                Character.y = 150 + 45
-                JumpState.jump = 1
 
     for monster in monsters:
         if collide_bottom(mario, monster) and JumpState.jump_high <= 0:
@@ -304,14 +394,22 @@ def update():
                 damage = 1
                 Character.item2 = 0
             elif damage == 0:
-                heart_num = len(heart_list)
-                if heart_num > 0:
-                    heart_list.remove(heart_list[heart_num - 1])
-                    game_world.remove_object(hearts[heart_num - 1])
-                    hearts.remove(hearts[heart_num - 1])
+                if heart_num > 1:
+
+                    for heart in hearts:
+                        game_world.remove_object(heart)
+
+                    hearts.clear()
+
+                    heart_list.pop()
+
+                    hearts = [Heart(heart_list[i]) for i in range(len(heart_list))]
+                    game_world.add_objects(hearts, 1)
+
                     damage = 1
-                if heart_num == 0:      # heart_num == 0일 때 처리 필요
-                    pass
+                else:      # heart_num == 0일 때 처리 필요
+                    game_framework.change_state(gameover_state)
+
 
     for monster in monsters2:
         if collide_bottom(mario, monster) and JumpState.jump_high <= 0:
@@ -323,14 +421,23 @@ def update():
                 Character.item2 = 0
                 damage = 1
             if damage == 0:
-                heart_num = len(heart_list)
-                if heart_num > 0:
-                    heart_list.remove(heart_list[heart_num - 1])
-                    game_world.remove_object(hearts[heart_num - 1])
-                    hearts.remove(hearts[heart_num - 1])
+                if heart_num > 1:
+
+                    for heart in hearts:
+                        game_world.remove_object(heart)
+
+                    hearts.clear()
+
+                    heart_list.pop()
+
+                    hearts = [Heart(heart_list[i]) for i in range(len(heart_list))]
+                    game_world.add_objects(hearts, 1)
+
                     damage = 1
-                if heart_num == 0:         # heart_num == 0일 때 처리 필요
-                    pass
+
+                else:         # heart_num == 0일 때 처리 필요
+                    game_framework.change_state(gameover_state)
+
 
     for brick in Brick1:
         if JumpState.jump_high <= 0:
@@ -371,43 +478,48 @@ def update():
 
 
     if collide(mario, green):
-        if heart_check == 0:
-            heart_num = len(heart_list) - 1
-            game_world.remove_object(green)
-            if heart_num != 0:
-                heart_list.insert(heart_num, heart_list[heart_num] + 50)
-            else:
-                heart_list.insert(heart_num + 1, 50)
 
-            for heart in hearts:
-                hearts = None
-                game_world.remove_object(heart)
+        for heart in hearts:
+            game_world.remove_object(heart)
 
-            hearts = [Heart(heart_list[i]) for i in range(len(heart_list))]
-            game_world.add_objects(hearts, 1)
-            heart_check = 1
+        hearts.clear()
+
+        if heart_num > 0:
+            heart_list.append(heart_list[heart_num - 1] + 50)
+        # else:
+        #     heart_list.insert(heart_num + 1, 50)
+
+        hearts = [Heart(heart_list[i]) for i in range(len(heart_list))]
+        game_world.add_objects(hearts, 1)
+
+        game_world.remove_object(green)
+        green = Green(8000, 150)
 
     if collide(mario, green2):
-        if heart_check == 1 or heart_check == 0:
-            heart_num = len(heart_list) - 1
-            game_world.remove_object(green2)
-            if heart_num >=  0:
-                heart_list.insert(heart_num, heart_list[heart_num] + 50)
-            else:
-                heart_list.insert(heart_num, 50)
 
-            for heart in hearts:
-                hearts = None
-                game_world.remove_object(heart)
+        for heart in hearts:
+            game_world.remove_object(heart)
 
-            hearts = [Heart(heart_list[i]) for i in range(len(heart_list))]
-            game_world.add_objects(hearts, 1)
-            heart_check = 2
+        hearts.clear()
+
+        if heart_num >  0:
+            heart_list.append(heart_list[heart_num - 1] + 50)
+        # else:
+            # heart_list.insert(heart_num + 1, 50)
+
+        hearts = [Heart(heart_list[i]) for i in range(len(heart_list))]
+        game_world.add_objects(hearts, 1)
+
+        game_world.remove_object(green2)
+        green2 = Green(8000, 150)
 
     if collide(mario, pupple):
         game_world.remove_object(pupple)
-        Character.item2 = 0
-        Character.item1 = 1
+        if Character.item1 == 0:
+            Character.item2 = 0
+            Character.item1 = 1
+        elif Character.item1 == 1:
+            pass    # 게임 오버 되어야 함
 
 
 

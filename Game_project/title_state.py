@@ -2,6 +2,8 @@ import game_framework
 from pico2d import *
 
 import main_state
+from main_state2 import *
+from main_state3 import *
 
 name = "TitleState"
 image = None
@@ -9,8 +11,9 @@ title_frame = 0
 
 
 def enter():
-    global image
+    global image, title_frame
     image = load_image('title.png')
+    title_frame = 0
 
 
 def exit():
@@ -27,8 +30,12 @@ def handle_events():
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
-            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
+            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE) and main_state.stage == 1:
                 game_framework.change_state(main_state)
+            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE) and main_state.stage == 2:
+                game_framework.change_state(main_state2)
+            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE) and main_state.stage == 3:
+                game_framework.change_state(main_state3)
 
 
 def draw():

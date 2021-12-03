@@ -1,6 +1,8 @@
 from pico2d import *
 import main_state
 from main_state import *
+from main_state2 import *
+from main_state3 import *
 from background import Background
 from character import Character
 
@@ -9,12 +11,6 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_COIN = 24
 
 class Coin:
-
-    coin3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0,
-             0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,
-             0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
-             0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-             0, 0, 0, 0, 0, 0]
 
     def __init__(self, x = 60, y = 15):
         self.image_coin = load_image('coin.png')
@@ -29,5 +25,7 @@ class Coin:
        return self.x - 15 - Background.backgroundX, self.y - 15, self.x + 15 - Background.backgroundX, self.y + 15
 
     def draw(self):
-        self.image_coin.clip_draw(int(self.frame) * 30, 0, 30, 30, self.x - Background.backgroundX, self.y)
-        draw_rectangle(*self.get_bb())
+        # self.image_coin.clip_draw(int(self.frame) * 30, 0, 30, 30, self.x - Background.backgroundX, self.y)
+        self.image_coin.clip_composite_draw(int(self.frame) * 30, 0, 30, 30, 0, '', self.x - Background.backgroundX, self.y, 30, 30)
+
+        # draw_rectangle(*self.get_bb())

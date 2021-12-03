@@ -1,5 +1,7 @@
 import main_state
 from main_state import *
+from main_state2 import *
+from main_state3 import *
 from background import Background
 
 TIME_PER_ACTION = 0.5
@@ -35,4 +37,4 @@ class Star:
 
     def draw(self):
         self.image_star.clip_composite_draw(int(self.frame) * 652, 0, 652, 660, 0, '', self.x - Background.backgroundX, self.y, 30, 30)
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())

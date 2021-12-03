@@ -1,5 +1,7 @@
 import main_state
 from main_state import *
+from main_state2 import *
+from main_state3 import *
 from background import Background
 
 

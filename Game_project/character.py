@@ -3,16 +3,17 @@ import game_framework
 import main_state
 from background import Background
 from main_state import *
+from main_state2 import *
+from main_state3 import *
 from fire_ball import Fire_ball
 
 import game_world
 
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 20.0   # km / hour
+RUN_SPEED_KMPH = 30.0   # km / hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0 )
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER )
-
 
 JUMP_PIXEL_PER_METER = 10.0 / 0.3
 JUMP_SPEED_KMPH = 1.5
@@ -186,11 +187,12 @@ class JumpState:
 
                 Character.y += JumpState.jump_high * JUMP_SPEED_PPS * game_framework.frame_time
 
+                # print(RUN_SPEED_PPS)
+                if Character.x >= 390 and Character.x <= 410:
+                    Background.backgroundX += int(character.velocity * game_framework.frame_time)
+
                 if Background.backgroundX <= 0 or Background.backgroundX >= 6700:
                     Character.x += character.velocity * game_framework.frame_time
-
-                elif Character.x >= 395 and Character.x <= 405:
-                    Background.backgroundX += int(character.dir)
 
                 Character.x = clamp(25, Character.x, 800 - 25)
 
@@ -298,8 +300,8 @@ class RunState:
 
     def do(character):
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
-        if Character.x >= 395 and Character.x <= 405:
-            Background.backgroundX += int(character.dir)
+        if Character.x >= 390 and Character.x <= 410:
+            Background.backgroundX += int(character.velocity * game_framework.frame_time)
 
         if Background.backgroundX <= 0 or Background.backgroundX >= 6700:
             Character.x += character.velocity * game_framework.frame_time
