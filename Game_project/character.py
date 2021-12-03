@@ -3,9 +3,6 @@ import game_framework
 import main_state
 from background import Background
 from main_state import *
-from main_state2 import *
-from main_state3 import *
-from main_state_sc import *
 from fire_ball import Fire_ball
 
 import game_world
@@ -189,12 +186,16 @@ class JumpState:
                 Character.y += JumpState.jump_high * JUMP_SPEED_PPS * game_framework.frame_time
 
                 # print(RUN_SPEED_PPS)
-                if Character.x >= 390 and Character.x <= 410:
-                    Background.backgroundX += int(character.velocity * game_framework.frame_time)
 
-                if Background.backgroundX <= 0 or Background.backgroundX >= 6700:
+                if main_state.stage != 4:
+                    if Character.x >= 390 and Character.x <= 410:
+                        Background.backgroundX += int(character.velocity * game_framework.frame_time)
+
+                    if Background.backgroundX <= 0 or Background.backgroundX >= 6700:
+                        Character.x += character.velocity * game_framework.frame_time
+
+                else:
                     Character.x += character.velocity * game_framework.frame_time
-
                 Character.x = clamp(25, Character.x, 800 - 25)
 
                 if character.jump_timer == 0:
@@ -301,12 +302,15 @@ class RunState:
 
     def do(character):
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
-        if Character.x >= 390 and Character.x <= 410:
-            Background.backgroundX += int(character.velocity * game_framework.frame_time)
 
-        if Background.backgroundX <= 0 or Background.backgroundX >= 6700:
+        if main_state.stage != 4:
+            if Character.x >= 390 and Character.x <= 410:
+                Background.backgroundX += int(character.velocity * game_framework.frame_time)
+
+            if Background.backgroundX <= 0 or Background.backgroundX >= 6700:
+                Character.x += character.velocity * game_framework.frame_time
+        else:
             Character.x += character.velocity * game_framework.frame_time
-
         Character.x = clamp(25, Character.x, 800 - 25)
         JumpState.stop = 0
 

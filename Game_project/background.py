@@ -1,7 +1,6 @@
 from pico2d import *
 from main_state2 import *
 from main_state3 import *
-import main_state_sc
 import main_state
 
 import game_framework

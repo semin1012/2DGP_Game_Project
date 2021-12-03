@@ -1,9 +1,8 @@
 import main_state
 from main_state import *
-from main_state2 import *
-from main_state3 import *
-from main_state_sc import *
 from background import Background
+
+from pico2d import *
 
 class Path:
     def __init__(self, x = 4300, y = 55):

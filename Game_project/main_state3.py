@@ -72,7 +72,7 @@ def enter():
 
 
 def exit():
-    # game_world.clear()
+    game_world.clear()
     pass
 
 def pause():
@@ -92,7 +92,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and main_state.collide_bottom(main_state.mario, main_state.path) and main_state.stage == 3:
             Background.backgroundX = 100
             main_state.stage = 4
-            game_framework.change_state(main_state_sc)
+            # game_framework.change_state(main_state_sc)
             # pass
 
         else:
