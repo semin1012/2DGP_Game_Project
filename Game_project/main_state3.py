@@ -22,6 +22,7 @@ from green import Green
 from pupple import Pupple
 from background import Background
 from path import Path
+from key import Key
 
 import title_state
 name = "MainState3"
@@ -58,6 +59,7 @@ def enter():
         main_state.pupple2 = Pupple(9000, 300)
         main_state.green = Green(4000, 300)
         main_state.green2 = Green(9000, 150)
+        main_state.key = Key(-1000, 55)
 
 
         game_world.add_objects(main_state.Brick4, 0)
@@ -76,6 +78,7 @@ def enter():
         game_world.add_object(main_state.path, 2)
         game_world.add_object(main_state.path2, 2)
         game_world.add_object(path3, 2)
+        game_world.add_object(main_state.key, 1)
 
 
 def exit():
@@ -215,6 +218,10 @@ def update():
 
                 else:         # heart_num == 0일 때 처리 필요
                     game_framework.change_state(gameover_state)
+
+    if main_state.collide(main_state.mario, main_state.key):
+        Key.key_check = 1
+
 
 
     for brick in main_state.Brick1:

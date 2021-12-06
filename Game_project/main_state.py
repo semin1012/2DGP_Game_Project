@@ -21,6 +21,7 @@ from green import Green
 from pupple import Pupple
 from background import Background
 from path import Path
+from key import Key
 
 import title_state
 name = "MainState"
@@ -47,6 +48,7 @@ pupple = None
 pupple2 = None
 damage = None
 attack = None
+key = None
 
 heart_num = None
 heart_check = None
@@ -181,7 +183,7 @@ question_list_top3 = [300, 450]
 
 def enter():
     global background, mario, Brick1, Brick2, stage, brick1_1, coins, monsters, monsters2, hearts, damage, questions, star, green
-    global pupple, green2, path, Brick3
+    global pupple, green2, path, Brick3, key
 
     Background.backgroundX = 4000
     heart_check = 0
@@ -550,6 +552,7 @@ def update():
 
         game_world.remove_object(green2)
         green2 = Green(8000, 150)
+
 
     if collide(mario, pupple):
         game_world.remove_object(pupple)
