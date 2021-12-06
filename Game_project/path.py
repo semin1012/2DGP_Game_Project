@@ -19,4 +19,4 @@ class Path:
 
     def draw(self):
         self.image_path.clip_composite_draw(0, 0, 118, 119, 0, '', self.x - Background.backgroundX, self.y, 60, 70)
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())

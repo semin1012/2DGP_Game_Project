@@ -30,7 +30,7 @@ heart_list = [50, 100, 150]
 
 def enter():
 
-    Background.backgroundX = 4000
+    Background.backgroundX = 6000
     main_state.heart_check = 0
     main_state.damage = 0
     main_state.hearts = [Heart(main_state.heart_list[i]) for i in range(len(main_state.heart_list))]

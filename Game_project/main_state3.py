@@ -26,10 +26,14 @@ from path import Path
 import title_state
 name = "MainState3"
 
+path3 = None
+
 def enter():
+    global path3
+    brick4 = [ -1600 + 58 * i for i in range(20)]
+
     if main_state.stage == 3:
 
-        Background.backgroundX = 800
         main_state.heart_check = 0
         main_state.damage = 0
         main_state.hearts = [Heart(main_state.heart_list[i]) for i in range(len(main_state.heart_list))]
@@ -38,7 +42,7 @@ def enter():
         game_world.add_objects(main_state.hearts, 1)
 
 
-
+        main_state.Brick4 = [Ground(brick4[i]) for i in range(len(brick4))]
         main_state.Brick2 = [Ground2(main_state.brick3_2[i] * 58 * i, 150) for i in range(len(main_state.brick3_2))]
         main_state.Brick3 = [Ground2(main_state.brick3_3[i] * 58 * i, 300) for i in range(len(main_state.brick3_3))]
         main_state.coins = [Coin(main_state.coin2_3[i] * 58 * i, 185) for i in range(len(main_state.coin2_3))]
@@ -47,14 +51,16 @@ def enter():
         main_state.monsters = [Monster(main_state.monster_list3[i], main_state.monster_list_top3[i]) for i in range(len(main_state.monster_list3))]
         main_state.monsters2 = [Monster(main_state.monster_list_right3[i], 60, 1) for i in range(len(main_state.monster_list_right3))]
         main_state.star = Star(main_state.question_list3[0], 300)
-        main_state.path = Path(600, 55)
+        main_state.path = Path(300, 55)
         main_state.path2 = Path(6800, 55)
+        path3 = Path(-700, 55)
         main_state.pupple = Pupple(6000, 450)
         main_state.pupple2 = Pupple(9000, 300)
         main_state.green = Green(4000, 300)
         main_state.green2 = Green(9000, 150)
 
 
+        game_world.add_objects(main_state.Brick4, 0)
         game_world.add_objects(main_state.Brick2, 0)
         game_world.add_objects(main_state.Brick3, 0)
         game_world.add_objects(main_state.coins, 0)
@@ -69,6 +75,7 @@ def enter():
         game_world.add_objects(main_state.monsters2, 1)
         game_world.add_object(main_state.path, 2)
         game_world.add_object(main_state.path2, 2)
+        game_world.add_object(path3, 2)
 
 
 def exit():
@@ -82,6 +89,7 @@ def resume():
     pass
 
 def handle_events():
+    global path3
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -90,8 +98,16 @@ def handle_events():
                 game_framework.quit()
 
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and main_state.collide_bottom(main_state.mario, main_state.path) and main_state.stage == 3:
-            Background.backgroundX = 100
+            Character.x = 500
+            Background.backgroundX = -1200
             main_state.stage = 4
+
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and main_state.collide_bottom(main_state.mario, path3) and main_state.stage == 4:
+            main_state.stage = 3
+            Character.x = 300
+            Background.backgroundX = 0
+
+
             # game_framework.change_state(main_state_sc)
             # pass
 
@@ -100,6 +116,8 @@ def handle_events():
 
 
 def update():
+    global path3
+
     main_state.heart_num = len(main_state.heart_list)
 
     for game_object in game_world.all_objects():
@@ -224,6 +242,15 @@ def update():
                     Character.y = 300 + 40
                     JumpState.jump = 1
 
+    for brick in main_state.Brick4:
+        if JumpState.jump_high <= 0:
+            if main_state.collide(main_state.mario, brick):
+                Character.jump_timer = 0
+                JumpState.jump_high = 0
+                Character.y = 15 + 40
+                JumpState.jump = 1
+
+
     if main_state.collide(main_state.mario, main_state.star):
         Character.item1 = 0
         Character.item2 = 1
@@ -231,6 +258,20 @@ def update():
 
 
     if main_state.collide_bottom(main_state.mario, main_state.path) and Character.next_state_table == 0:
+        JumpState.jump_high = 0
+        Character.jump_timer = 0
+        Character.y = 115
+        JumpState.jump = 1
+
+
+    if main_state.collide_bottom(main_state.mario, main_state.path2) and Character.next_state_table == 0:
+        JumpState.jump_high = 0
+        Character.jump_timer = 0
+        Character.y = 115
+        JumpState.jump = 1
+
+
+    if main_state.collide_bottom(main_state.mario, path3) and Character.next_state_table == 0:
         JumpState.jump_high = 0
         Character.jump_timer = 0
         Character.y = 115
