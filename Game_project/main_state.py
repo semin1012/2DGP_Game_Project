@@ -191,7 +191,7 @@ def enter():
     global pupple, green2, path, Brick3, key, font, heart_check
 
     font = load_font('ENCR10B.TTF', 16)
-    Background.backgroundX = 4000
+    Background.backgroundX = 600
     heart_check = 0
     damage = 0
     mario = Character()

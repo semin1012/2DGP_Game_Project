@@ -56,7 +56,7 @@ def enter():
         main_state.monsters2 = [Monster(main_state.monster_list_right3[i], 60, 1) for i in range(len(main_state.monster_list_right3))]
         main_state.star = Star(main_state.question_list3[0], 300)
         main_state.path = Path(300, 55)
-        main_state.path2 = Path(600, 55)
+        main_state.path2 = Path(6000, 55)
         path3 = Path(-700, 55)
         main_state.pupple = Pupple(6000, 450)
         main_state.pupple2 = Pupple(9000, 300)

@@ -5,6 +5,10 @@ import start_state
 import main_state
 from main_state3 import *
 from main_state2 import *
+from pupple import Pupple
+from green import Green
+from star import Star
+
 from background import Background
 
 name = "GameOverState"
@@ -40,6 +44,9 @@ def handle_events():
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
                 game_framework.change_state(title_state)
+                Pupple.move = 0
+                Star.move = 0
+                Green.move = 0
 
 
 def draw():

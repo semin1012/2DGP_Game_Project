@@ -30,7 +30,7 @@ heart_list = [50, 100, 150]
 
 def enter():
 
-    Background.backgroundX = 6000
+    Background.backgroundX = 800
     main_state.heart_check = 0
     main_state.damage = 0
     main_state.hearts = [Heart(main_state.heart_list[i]) for i in range(len(main_state.heart_list))]
@@ -86,7 +86,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
                 game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and main_state.collide_bottom(main_state.mario, main_state.path) and main_state.stage == 2:
-            Background.backgroundX = 300
+            Background.backgroundX = 800
             main_state.stage = 3
             game_framework.change_state(main_state3)
             # pass
