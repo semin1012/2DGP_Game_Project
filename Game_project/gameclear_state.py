@@ -1,8 +1,3 @@
-import game_framework
-from pico2d import *
-
-import start_state
-import main_state
 from main_state3 import *
 from main_state2 import *
 from key import Key
@@ -46,7 +41,6 @@ def draw():
         image.clip_draw(0, 0, 800, 600, 400, 300)
     else:
         image_key.clip_draw(0, 0, 800, 600, 400, 300)
-   # image.draw(400, 300)
     update()
     update_canvas()
 

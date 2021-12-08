@@ -1,6 +1,4 @@
-import main_state
 from main_state import *
-from main_state2 import *
 from main_state3 import *
 from background import Background
 
@@ -37,8 +35,6 @@ class Pupple:
 
     def draw(self):
         self.image_pupple.clip_composite_draw(int(self.frame) * 600, 0, 600, 600, 0, '', self.x - Background.backgroundX, self.y, 30, 30)
-        # draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        # fill here
        return self.x - 15 - Background.backgroundX, self.y - 15, self.x + 15 - Background.backgroundX, self.y + 15

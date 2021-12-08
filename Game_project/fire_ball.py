@@ -1,11 +1,4 @@
-from pico2d import *
-import main_state
-from main_state import *
-from main_state2 import *
 from main_state3 import *
-from background import Background
-import character
-
 
 TIME_PER_ACTION = 0.7
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -30,9 +23,7 @@ class Fire_ball:
         self.move = 0
 
     def draw(self):
-        # self.image.draw(self.x, self.y)
         Fire_ball.image.clip_composite_draw(int(self.frame) * 33, 0, 33, 40, 0, '', self.x, self.y, 33, 40)
-        # draw_rectangle(*self.get_bb())
 
     def get_bb(self):
        return self.x - 16.5, self.y - 20, self.x + 16.5, self.y + 20
@@ -58,7 +49,3 @@ class Fire_ball:
 
 
         else: game_world.remove_object(self)
-        # self.x += self.velocity
-
-        # if self.x < 25 or self.x > 1600 - 25:
-        #     game_world.remove_object(self)

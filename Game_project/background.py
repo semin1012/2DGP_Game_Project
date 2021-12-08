@@ -1,11 +1,6 @@
-from pico2d import *
 from main_state import *
-from main_state2 import *
 from main_state3 import *
 import main_state
-
-import game_framework
-import game_world
 
 class Background:
     image = None

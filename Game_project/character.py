@@ -1,7 +1,5 @@
-from pico2d import *
-import game_framework
+
 import main_state
-from background import Background
 from main_state import *
 from fire_ball import Fire_ball
 
@@ -46,7 +44,6 @@ key_event_table = {
 }
 
 
-# 아이템 설정 필요 object
 
 class Character:    # 마리오
     x, y = 400, 50
