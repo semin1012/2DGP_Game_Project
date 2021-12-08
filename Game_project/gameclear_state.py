@@ -40,7 +40,7 @@ def draw():
     if Key.key_check == 0:
         image.clip_draw(0, 0, 800, 600, 400, 300)
     else:
-        image_key.clip_draw(0, 0, 800, 600, 400, 300)
+        image_key.clip_draw(0, 0, 800, 600, 400,  300)
     update()
     update_canvas()
 
