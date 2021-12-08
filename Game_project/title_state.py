@@ -4,16 +4,23 @@ from pico2d import *
 import main_state
 from main_state2 import *
 from main_state3 import *
+from background import Background
 
 name = "TitleState"
 image = None
 title_frame = 0
-
+title_sound = None
 
 def enter():
-    global image, title_frame
+    global image, title_frame, title_sound
     image = load_image('title.png')
     title_frame = 0
+    title_sound = load_music('mario1.mp3')
+    title_sound.set_volume(40)
+    title_sound.play()
+    Background.bgm = load_music('mario2.mp3')
+    Background.bgm.set_volume(30)
+
 
 
 def exit():
@@ -32,11 +39,14 @@ def handle_events():
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE) and main_state.stage == 1 or (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE) and main_state.stage == 5:
                 main_state.stage = 1
+                Background.bgm.play()
                 game_framework.change_state(main_state)
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE) and main_state.stage == 2:
                 game_framework.change_state(main_state2)
+                Background.bgm.play()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE) and main_state.stage == 3:
                 game_framework.change_state(main_state3)
+                Background.bgm.play()
 
 
 def draw():

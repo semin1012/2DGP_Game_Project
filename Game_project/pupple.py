@@ -21,6 +21,11 @@ class Pupple:
         self.frame = 0
         self.x, self.y = x, y
         self.up = 0
+        self.pupple_sound = load_wav('Appear.wav')
+        self.pupple_sound.set_volume(32)
+
+    def sound(self):
+        self.pupple_sound.play()
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_COIN * ACTION_PER_TIME * game_framework.frame_time) % 5

@@ -55,6 +55,21 @@ class Character:    # 마리오
     next_state_table = 0
     ball = None
     def __init__(self):
+        self.jump_sound = load_wav('jump.wav')
+        self.jump_sound.set_volume(30)
+
+        self.monsters_sound = load_wav('monster.wav')
+        self.monsters_sound.set_volume(30)
+
+        self.damages_sound = load_wav('damage.wav')
+        self.damages_sound.set_volume(30)
+
+        self.fires_sound = load_wav('fire.wav')
+        self.fires_sound.set_volume(30)
+
+        self.coins_sound = load_wav('coin.wav')
+        self.coins_sound.set_volume(20)
+
         # self.cx, self.cy = 50, 0
         self.dir, self.cdir = 0, 0
         self.jump, self.jump_count = 0, 0
@@ -82,6 +97,14 @@ class Character:    # 마리오
         self.jump_high = 100
         self.stop = 0
 
+    def coin_sound(self):
+        self.coins_sound.play()
+
+    def monster_sound(self):
+        self.monsters_sound.play()
+
+    def damage_sound(self):
+        self.damages_sound.play()
 
     def add_event(self, event):
         self.event_que.insert(0, event)
@@ -116,17 +139,23 @@ class Character:    # 마리오
 
     def fire_ball(self):
         # print('fire_ball')
+        self.fires_sound.play()
         Character.ball = Fire_ball(Character.x, Character.y, self.dir)
         game_world.add_object(Character.ball, 1)
         pass
 
     def handle_event(self, event):
+        if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LCTRL):
+            self.jump_sound.play()
+
+
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             if (DEBUG_KEY == key_event):
                 print(history[-4:])
             else:
                 self.add_event(key_event)
+
 
     def get_bb(self):
         # fill here

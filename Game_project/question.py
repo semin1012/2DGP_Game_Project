@@ -11,6 +11,11 @@ class Question:
         self.image_ground = load_image('question_1.png')
         self.x, self.y = x, y
         self.image = 0
+        self.question_sound = load_wav('Coin.wav')
+        self.question_sound.set_volume(32)
+
+    def sound(self):
+        self.question_sound.play()
 
     def update(self):
         pass

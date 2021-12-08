@@ -104,6 +104,7 @@ def update():
 
     for coin in main_state.coins:
         if main_state.collide(main_state.mario, coin):
+            main_state.mario.coin_sound()
             Coin.coin_num += 10
             main_state.coins.remove(coin)
             game_world.remove_object(coin)
@@ -111,12 +112,14 @@ def update():
     if main_state.stage != 1:
         for coin in main_state.coins3:
             if main_state.collide(main_state.mario, coin):
+                main_state.mario.coin_sound()
                 Coin.coin_num += 10
                 main_state.coins3.remove(coin)
                 game_world.remove_object(coin)
 
     for question in main_state.questions:
         if main_state.collide_top(main_state.mario, question):
+            question.sound()
             JumpState.jump_high = -2
             question.image = 1
             if main_state.star.y == question.y and main_state.star.x == question.x:
@@ -152,14 +155,16 @@ def update():
 
     for monster in main_state.monsters:
         if main_state.collide_bottom(main_state.mario, monster) and JumpState.jump_high <= 0:
+            main_state.mario.monster_sound()
             main_state.monsters.remove(monster)
             game_world.remove_object(monster)
-        elif main_state.collide(main_state.mario, monster) :
+        elif main_state.collide(main_state.mario, monster):
             if Character.item2 == 1:
                 main_state.damage = 1
                 Character.item2 = 0
             elif main_state.damage == 0:
                 if main_state.heart_num > 1:
+                    main_state.mario.damage_sound()
 
                     for heart in main_state.hearts:
                         game_world.remove_object(heart)
@@ -182,6 +187,7 @@ def update():
 
     for monster in main_state.monsters2:
         if main_state.collide_bottom(main_state.mario, monster) and JumpState.jump_high <= 0:
+            main_state.mario.monster_sound()
             main_state.monsters2.remove(monster)
             game_world.remove_object(monster)
 
@@ -191,6 +197,7 @@ def update():
                 main_state.damage = 1
             if main_state.damage == 0:
                 if main_state.heart_num > 1:
+                    main_state.mario.damage_sound()
 
                     for heart in main_state.hearts:
                         game_world.remove_object(heart)
@@ -275,7 +282,7 @@ def update():
 
         main_state.hearts.clear()
 
-        if main_state.heart_num >  0:
+        if main_state.heart_num > 0:
             main_state.heart_list.append(heart_list[main_state.heart_num - 1] + 50)
         # else:
             # heart_list.insert(heart_num + 1, 50)
@@ -288,6 +295,7 @@ def update():
 
     if main_state.collide(main_state.mario, main_state.pupple):
         game_world.remove_object(main_state.pupple)
+        main_state.pupple.sound()
         if Character.item1 == 0:
             Character.item2 = 0
             Character.item1 = 1

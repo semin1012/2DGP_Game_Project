@@ -19,6 +19,7 @@ class Coin:
         self.font = load_font('ENCR10B.TTF', 16)
         self.x, self.y = x, y
 
+
     def update(self):
         self.frame = (self.frame + FRAMES_PER_COIN * ACTION_PER_TIME * game_framework.frame_time) % 24
 

@@ -5,14 +5,20 @@ import start_state
 import main_state
 from main_state3 import *
 from main_state2 import *
+from background import Background
 
 name = "GameOverState"
 image = None
 gameover_frame = 0
+gameover_sound = None
 
 
 def enter():
-    global image, gameover_frame
+    global image, gameover_frame, gameover_sound
+
+    gameover_sound = load_music('gameover.mp3')
+    gameover_sound.set_volume(40)
+    gameover_sound.play()
     image = load_image('gameover.png')
     gameover_frame = 0
 

@@ -10,12 +10,15 @@ from key import Key
 name = "GameClearState"
 image = None
 image_key = None
+clear_sound = None
 
 def enter():
-    global image, image_key
+    global image, image_key, clear_sound
     image = load_image('gameclear.png')
     image_key = load_image('gameclear_key.png')
-
+    clear_sound = load_music('clear.mp3')
+    clear_sound.set_volume(40)
+    clear_sound.play()
 
 def exit():
     global image, image_key

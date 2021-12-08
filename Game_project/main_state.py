@@ -21,6 +21,7 @@ from green import Green
 from pupple import Pupple
 from background import Background
 from path import Path
+from server import *
 from key import Key
 
 import title_state
@@ -50,6 +51,7 @@ damage = None
 attack = None
 key = None
 font = None
+
 
 heart_num = None
 heart_check = None
@@ -182,9 +184,11 @@ question_list_top = [150, 150, 300, 150]
 question_list_top2 = [300, 450, 300, 150, 150]
 question_list_top3 = [300, 450]
 
+
+
 def enter():
     global background, mario, Brick1, Brick2, stage, brick1_1, coins, monsters, monsters2, hearts, damage, questions, star, green
-    global pupple, green2, path, Brick3, key, font
+    global pupple, green2, path, Brick3, key, font, heart_check
 
     font = load_font('ENCR10B.TTF', 16)
     Background.backgroundX = 4000
@@ -196,6 +200,8 @@ def enter():
     game_world.add_object(mario, 1)
     game_world.add_object(background, 0)
     game_world.add_objects(hearts, 1)
+
+
 
     if stage == 1:
         Brick1 = [Ground(brick1_1[i] * 54 + 54 * i, 15) for i in range(len(brick1_1))]
@@ -257,7 +263,7 @@ def handle_events():
 
 def update():
     global coin_check, monster_check, damage, hearts, heart_list, question_list, questions, star, attack, green, heart_num, stage
-    global heart_check, coins3, green2
+    global heart_check, coins3, green2, question_collide
 
     heart_num = len(heart_list)
 
@@ -266,19 +272,15 @@ def update():
 
     for coin in coins:
         if collide(mario, coin):
+            mario.coin_sound()
             Coin.coin_num += 10
             coins.remove(coin)
             game_world.remove_object(coin)
 
-    if stage != 1:
-        for coin in coins3:
-            if collide(mario, coin):
-                Coin.coin_num += 10
-                coins3.remove(coin)
-                game_world.remove_object(coin)
 
     for question in questions:
         if collide_top(mario, question):
+            question.sound()
             JumpState.jump_high = -2
             question.image = 1
             if star.y == question.y and star.x == question.x:
@@ -291,43 +293,33 @@ def update():
                 Pupple.move = 1
 
         if JumpState.jump_high <= 0:
+
             if stage == 1:
                 if collide_bottom(mario, questions[2]):
                     Character.jump_timer = 0
                     JumpState.jump_high = 0
                     Character.y = 300 + 45
                     JumpState.jump = 1
-                if collide_bottom(mario, question):
+                elif collide_bottom(mario, question):
                     Character.jump_timer = 0
                     JumpState.jump_high = 0
                     Character.y = 150 + 45
-                    JumpState.jump = 1
-
-            elif stage == 2:
-                if collide_bottom(mario, questions[0]) or collide_bottom(mario, questions[2]):
-                    Character.jump_timer = 0
-                    JumpState.jump_high = 0
-                    Character.y = 300 + 45
-                    JumpState.jump = 1
-
-                if collide_bottom(mario, questions[1]):
-                    Character.jump_timer = 0
-                    JumpState.jump_high = 0
-                    Character.y = 450 + 45
                     JumpState.jump = 1
 
 
 
     for monster in monsters:
         if collide_bottom(mario, monster) and JumpState.jump_high <= 0:
+            mario.monster_sound()
             monsters.remove(monster)
             game_world.remove_object(monster)
-        elif collide(mario, monster) :
+        elif collide(mario, monster):
             if Character.item2 == 1:
                 damage = 1
                 Character.item2 = 0
             elif damage == 0:
                 if heart_num > 1:
+                    mario.damage_sound()
 
                     for heart in hearts:
                         game_world.remove_object(heart)
@@ -350,6 +342,7 @@ def update():
 
     for monster in monsters2:
         if collide_bottom(mario, monster) and JumpState.jump_high <= 0:
+            mario.monster_sound()
             monsters2.remove(monster)
             game_world.remove_object(monster)
 
@@ -359,6 +352,7 @@ def update():
                 damage = 1
             if damage == 0:
                 if heart_num > 1:
+                    mario.damage_sound()
 
                     for heart in hearts:
                         game_world.remove_object(heart)
@@ -456,6 +450,7 @@ def update():
 
 
     if collide(mario, pupple):
+        pupple.sound()
         game_world.remove_object(pupple)
         if Character.item1 == 0:
             Character.item2 = 0

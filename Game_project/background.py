@@ -1,4 +1,5 @@
 from pico2d import *
+from main_state import *
 from main_state2 import *
 from main_state3 import *
 import main_state
@@ -15,8 +16,16 @@ class Background:
     image5_key = None
     image_path = None
     backgroundX = 3800
+    bgm = None
 
     def __init__(self):
+
+        Background.bgm = load_music('mario2.mp3')
+        Background.bgm.set_volume(64)
+
+        if main_state.stage < 5:
+            self.bgm.play()
+
         if Background.image == None:
             Background.image = load_image('mario_background4.png')
 
