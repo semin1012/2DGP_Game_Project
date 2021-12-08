@@ -11,6 +11,8 @@ class Background:
     image2 = None
     image3 = None
     image4 = None
+    image5 = None
+    image5_key = None
     image_path = None
     backgroundX = 3800
 
@@ -27,6 +29,8 @@ class Background:
         if Background.image4 == None:
             Background.image4 = load_image('mario_background5.png')
 
+        if Background.image5_key == None:
+            Background.image5_key = load_image('key_background.png')
 
     def draw(self):
         if main_state.stage == 1:
@@ -37,6 +41,9 @@ class Background:
             Background.image3.clip_draw(0 + Background.backgroundX, 0, 800, 600, 400, 300)
         elif main_state.stage == 4:
             Background.image4.clip_draw(0, 0, 800, 600, 400, 300)
+
+        elif main_state.stage == 5:
+            Background.image5_key.clip_draw(0, 0, 800, 600, 400, 300)
 
 
     def update(self):

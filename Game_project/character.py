@@ -187,7 +187,7 @@ class JumpState:
 
                 # print(RUN_SPEED_PPS)
 
-                if main_state.stage != 4:
+                if main_state.stage <= 3:
                     if Character.x >= 390 and Character.x <= 410:
                         Background.backgroundX += int(character.velocity * game_framework.frame_time)
 
@@ -303,7 +303,7 @@ class RunState:
     def do(character):
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
 
-        if main_state.stage != 4:
+        if main_state.stage != 4 and main_state != 5:
             if Character.x >= 390 and Character.x <= 410:
                 Background.backgroundX += int(character.velocity * game_framework.frame_time)
 

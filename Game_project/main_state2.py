@@ -86,7 +86,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
                 game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and main_state.collide_bottom(main_state.mario, main_state.path) and main_state.stage == 2:
-            Background.backgroundX = 600
+            Background.backgroundX = 300
             main_state.stage = 3
             game_framework.change_state(main_state3)
             # pass
@@ -104,12 +104,14 @@ def update():
 
     for coin in main_state.coins:
         if main_state.collide(main_state.mario, coin):
+            Coin.coin_num += 10
             main_state.coins.remove(coin)
             game_world.remove_object(coin)
 
     if main_state.stage != 1:
         for coin in main_state.coins3:
             if main_state.collide(main_state.mario, coin):
+                Coin.coin_num += 10
                 main_state.coins3.remove(coin)
                 game_world.remove_object(coin)
 
@@ -172,6 +174,10 @@ def update():
                     main_state.damage = 1
                 else:      # heart_num == 0일 때 처리 필요
                     game_framework.change_state(gameover_state)
+                    if Coin.coin_num - 100 >= 0:
+                        Coin.coin_num -= 100
+                    else:
+                        Coin.coin_num = 0
 
 
     for monster in main_state.monsters2:
@@ -200,6 +206,10 @@ def update():
 
                 else:         # heart_num == 0일 때 처리 필요
                     game_framework.change_state(gameover_state)
+                    if Coin.coin_num - 100 >= 0:
+                        Coin.coin_num -= 100
+                    else:
+                        Coin.coin_num = 0
 
 
     for brick in main_state.Brick1:
@@ -290,4 +300,5 @@ def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
         game_object.draw()
+    main_state.font.draw(720, 570, '%d' % Coin.coin_num, (255, 255, 0))
     update_canvas()

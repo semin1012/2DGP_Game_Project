@@ -30,7 +30,8 @@ def handle_events():
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
-            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE) and main_state.stage == 1:
+            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE) and main_state.stage == 1 or (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE) and main_state.stage == 5:
+                main_state.stage = 1
                 game_framework.change_state(main_state)
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE) and main_state.stage == 2:
                 game_framework.change_state(main_state2)

@@ -6,6 +6,7 @@ import gameover_state
 import game_framework
 import game_world
 import main_state
+import gameclear_state
 import main_state2
 from pico2d import *
 
@@ -23,14 +24,16 @@ from pupple import Pupple
 from background import Background
 from path import Path
 from key import Key
+from peach import Peach
 
 import title_state
 name = "MainState3"
 
 path3 = None
+peach = None
 
 def enter():
-    global path3
+    global path3, peach
     brick4 = [ -1600 + 58 * i for i in range(20)]
 
     if main_state.stage == 3:
@@ -53,13 +56,14 @@ def enter():
         main_state.monsters2 = [Monster(main_state.monster_list_right3[i], 60, 1) for i in range(len(main_state.monster_list_right3))]
         main_state.star = Star(main_state.question_list3[0], 300)
         main_state.path = Path(300, 55)
-        main_state.path2 = Path(6800, 55)
+        main_state.path2 = Path(600, 55)
         path3 = Path(-700, 55)
         main_state.pupple = Pupple(6000, 450)
         main_state.pupple2 = Pupple(9000, 300)
         main_state.green = Green(4000, 300)
         main_state.green2 = Green(9000, 150)
         main_state.key = Key(-1000, 55)
+        peach = Peach(-1400, 65)
 
 
         game_world.add_objects(main_state.Brick4, 0)
@@ -75,10 +79,11 @@ def enter():
         game_world.add_object(main_state.pupple2, 0)
         game_world.add_objects(main_state.monsters, 1)
         game_world.add_objects(main_state.monsters2, 1)
-        game_world.add_object(main_state.path, 2)
         game_world.add_object(main_state.path2, 2)
         game_world.add_object(path3, 2)
+        game_world.add_object(main_state.path, 2)
         game_world.add_object(main_state.key, 1)
+        game_world.add_object(peach, 2)
 
 
 def exit():
@@ -105,11 +110,18 @@ def handle_events():
             Background.backgroundX = -1200
             main_state.stage = 4
 
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and main_state.collide_bottom(main_state.mario, path3) and main_state.stage == 4:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and main_state.collide_bottom(main_state.mario, path3):
             main_state.stage = 3
             Character.x = 300
             Background.backgroundX = 0
 
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and main_state.collide_bottom(main_state.mario, main_state.path2) and main_state.stage == 3:
+            main_state.stage = 5
+            if Key.key_check == 0:
+                game_framework.change_state(gameclear_state)
+            else:
+                Character.x = 500
+                Background.backgroundX = -1600
 
             # game_framework.change_state(main_state_sc)
             # pass
@@ -128,12 +140,14 @@ def update():
 
     for coin in main_state.coins:
         if main_state.collide(main_state.mario, coin):
+            Coin.coin_num += 10
             main_state.coins.remove(coin)
             game_world.remove_object(coin)
 
     if main_state.stage != 1:
         for coin in main_state.coins3:
             if main_state.collide(main_state.mario, coin):
+                Coin.coin_num += 10
                 main_state.coins3.remove(coin)
                 game_world.remove_object(coin)
 
@@ -190,6 +204,10 @@ def update():
                     main_state.damage = 1
                 else:      # heart_num == 0일 때 처리 필요
                     game_framework.change_state(gameover_state)
+                    if Coin.coin_num - 100 >= 0:
+                        Coin.coin_num -= 100
+                    else:
+                        Coin.coin_num = 0
 
 
     for monster in main_state.monsters2:
@@ -218,6 +236,10 @@ def update():
 
                 else:         # heart_num == 0일 때 처리 필요
                     game_framework.change_state(gameover_state)
+                    if Coin.coin_num - 100 >= 0:
+                        Coin.coin_num -= 100
+                    else:
+                        Coin.coin_num = 0
 
     if main_state.collide(main_state.mario, main_state.key):
         Key.key_check = 1
@@ -257,6 +279,8 @@ def update():
                 Character.y = 15 + 40
                 JumpState.jump = 1
 
+    if main_state.collide(main_state.mario, peach):
+        game_framework.change_state(gameclear_state)
 
     if main_state.collide(main_state.mario, main_state.star):
         Character.item1 = 0
@@ -311,7 +335,7 @@ def update():
         main_state.hearts.clear()
 
         if main_state.heart_num >  0:
-            main_state.heart_list.append(heart_list[main_state.heart_num - 1] + 50)
+            main_state.heart_list.append(main_state.heart_list[main_state.heart_num - 1] + 50)
         # else:
             # heart_list.insert(heart_num + 1, 50)
 
@@ -335,4 +359,5 @@ def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
         game_object.draw()
+    main_state.font.draw(720, 570, '%d' % Coin.coin_num, (255, 255, 0))
     update_canvas()
