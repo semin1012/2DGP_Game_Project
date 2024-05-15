@@ -13,5 +13,5 @@
 - 파이썬을 이용하여 개발한 3가지 스테이지의 슈퍼마리오 모작 게임
  
  
-[![Video Label](http://img.youtube.com/vi/Iu0vESZKSfU&t=5s/0.jpg)](https://youtu.be/Iu0vESZKSfU&t=5s)
+[![Video Label](http://img.youtube.com/vi/Iu0vESZKSfU/0.jpg)](https://youtu.be/Iu0vESZKSfU&t=5s)
 - 이미지를 클릭하면 유튜브 영상으로 넘어갑니다.
